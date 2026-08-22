@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app_standard/domain/models/ncd_models.dart';
 import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
 import 'package:mobile_app_standard/feature/patient/pages/vhv_patient_list_page.dart';
+import 'package:mobile_app_standard/feature/screening/pages/pdf_preview_page.dart';
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
 
 class RiskAssessmentResultPage extends StatelessWidget {
@@ -37,6 +38,24 @@ class RiskAssessmentResultPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf_outlined, color: Colors.white),
+            tooltip: 'ส่งออก/พิมพ์รายงาน PDF',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PdfPreviewPage(
+                    patient: patient,
+                    screening: screening,
+                    vhv: vhv,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -59,7 +78,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 22,
-                      backgroundColor: PColor.primaryLight.withOpacity(0.15),
+                      backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
                       child: const Icon(Icons.person, color: PColor.primaryColor),
                     ),
                     const SizedBox(width: 12),
@@ -105,9 +124,41 @@ class RiskAssessmentResultPage extends StatelessWidget {
               const SizedBox(height: 8),
 
               // 4 Disease Risk Cards
-              ...screening.results.map((res) => _buildDiseaseCard(res)),
+              ...screening.results.map(_buildDiseaseCard),
 
-              const SizedBox(height: 24),
+              // PDF Export Action Button
+              OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PdfPreviewPage(
+                        patient: patient,
+                        screening: screening,
+                        vhv: vhv,
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.picture_as_pdf_outlined, color: PColor.primaryColor),
+                label: const Text(
+                  'ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: PColor.primaryColor,
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  side: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  backgroundColor: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 12),
 
               // Back to Patient List Button
               ElevatedButton(
@@ -243,7 +294,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -268,7 +319,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: badgeBg,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: badgeColor.withOpacity(0.4)),
+                  border: Border.all(color: badgeColor.withValues(alpha: 0.4)),
                 ),
                 child: Text(
                   'ความเสี่ยง${result.riskLevel.labelTh}',

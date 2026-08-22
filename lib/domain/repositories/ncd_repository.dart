@@ -32,6 +32,7 @@ abstract class NcdRepositoryInterface {
 
   // Screenings
   Future<List<Screening>> getScreeningsByPatient(String patientId);
+  Future<List<Screening>> getAllScreenings({String? villageId});
   Future<Screening?> getScreeningById(String screeningId);
   Future<Screening> saveScreening(Screening screening);
   Future<Screening> updateScreeningReview({
@@ -498,6 +499,23 @@ class MockNcdRepository implements NcdRepositoryInterface {
     return _screenings
         .where((s) => s.patientId == patientId)
         .toList()
+      ..sort((a, b) => b.screeningDate.compareTo(a.screeningDate));
+  }
+
+  @override
+  Future<List<Screening>> getAllScreenings({String? villageId}) async {
+    await Future.delayed(const Duration(milliseconds: 150));
+    if (villageId != null && villageId.isNotEmpty) {
+      final patientIdsInVillage = _patients
+          .where((p) => p.villageId == villageId)
+          .map((p) => p.patientId)
+          .toSet();
+      return _screenings
+          .where((s) => patientIdsInVillage.contains(s.patientId))
+          .toList()
+        ..sort((a, b) => b.screeningDate.compareTo(a.screeningDate));
+    }
+    return _screenings.toList()
       ..sort((a, b) => b.screeningDate.compareTo(a.screeningDate));
   }
 

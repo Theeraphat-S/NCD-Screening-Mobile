@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app_standard/domain/models/ncd_models.dart';
 import 'package:mobile_app_standard/feature/nurse/pages/nurse_approve_risk_page.dart';
 import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
+import 'package:mobile_app_standard/feature/screening/pages/pdf_preview_page.dart';
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
 
 class PatientScreeningDetailPage extends StatelessWidget {
@@ -50,6 +51,25 @@ class PatientScreeningDetailPage extends StatelessWidget {
               ),
             ),
             centerTitle: true,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.picture_as_pdf_outlined, color: Colors.white),
+                tooltip: 'ส่งออก/พิมพ์รายงาน PDF',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PdfPreviewPage(
+                        patient: patient,
+                        screening: currentScreening,
+                        vhv: vhv,
+                        nurse: nurse,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(18.0),
@@ -108,7 +128,7 @@ class PatientScreeningDetailPage extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        backgroundColor: PColor.primaryLight.withOpacity(0.15),
+                        backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
                         child: const Icon(Icons.person, size: 36, color: PColor.primaryColor),
                       ),
                       const SizedBox(width: 14),
@@ -183,7 +203,7 @@ class PatientScreeningDetailPage extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: _getRiskColor(res.riskLevel).withOpacity(0.12),
+                                  color: _getRiskColor(res.riskLevel).withValues(alpha: 0.12),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
@@ -285,7 +305,40 @@ class PatientScreeningDetailPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                // PDF Export Action Button
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PdfPreviewPage(
+                          patient: patient,
+                          screening: currentScreening,
+                          vhv: vhv,
+                          nurse: nurse,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.picture_as_pdf_outlined, color: PColor.primaryColor),
+                  label: const Text(
+                    'ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: PColor.primaryColor,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    backgroundColor: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 14),
 
                 // Nurse Action Button
                 if (nurse != null) ...[

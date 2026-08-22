@@ -1,15 +1,58 @@
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mobile_app_standard/domain/datasource/app_datebase.dart';
 import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
+import 'package:mobile_app_standard/domain/repositories/drift_ncd_repository.dart';
+import 'package:mobile_app_standard/domain/services/ncd_risk_calculator.dart';
 
 void main() {
-  late MockNcdRepository repository;
+  late AppDatabase db;
+  late DriftNcdRepository repository;
 
-  setUp(() {
-    repository = MockNcdRepository();
+  setUp(() async {
+    db = AppDatabase(NativeDatabase.memory());
+    repository = DriftNcdRepository(db);
   });
 
-  group('MockNcdRepository - Authentication (login)', () {
+  tearDown(() async {
+    await db.close();
+  });
+
+  group('Drift Database - Initialization & Seeding', () {
+    test('Schema version is 3', () {
+      expect(db.schemaVersion, equals(3));
+    });
+
+    test('Initial automatic demo seeding populates all 7 tables correctly',
+        () async {
+      final villages = await repository.getVillages();
+      expect(villages.length, equals(5));
+      expect(villages.map((v) => v.villageId),
+          containsAll(['V001', 'V002', 'V003', 'V004', 'V005']));
+
+      final nurses = await (db.select(db.nursesTable)).get();
+      expect(nurses.length, equals(1));
+      expect(nurses.first.nurseId, equals('NUR001'));
+      expect(nurses.first.nurseFname, equals('กานดา'));
+
+      final vhvs = await repository.getVhvs();
+      expect(vhvs.length, equals(3));
+      expect(vhvs.map((v) => v.vhvId),
+          containsAll(['VHV001', 'VHV002', 'VHV003']));
+
+      final patients = await repository.getPatients();
+      expect(patients.length, equals(6));
+      expect(patients.map((p) => p.patientId),
+          containsAll(['P001', 'P002', 'P003', 'P004', 'P005', 'P006']));
+
+      final screenings = await repository.getAllScreenings();
+      expect(screenings.length, equals(2));
+      expect(screenings.first.histories.length, greaterThanOrEqualTo(4));
+      expect(screenings.first.results.length, equals(4));
+    });
+  });
+
+  group('DriftNcdRepository - Authentication', () {
     test('Patient login succeeds with valid 13-digit citizen ID', () async {
       final user = await repository.login(
         role: UserRole.patient,
@@ -22,7 +65,8 @@ void main() {
       expect(patient.patientFname, equals('สมชาย'));
     });
 
-    test('Patient login throws Exception for unregistered citizen ID', () async {
+    test('Patient login throws Exception for unregistered citizen ID',
+        () async {
       expect(
         () => repository.login(
           role: UserRole.patient,
@@ -32,7 +76,9 @@ void main() {
       );
     });
 
-    test('VHV login succeeds with valid credentials (mobile/ID and correct password)', () async {
+    test(
+        'VHV login succeeds with valid credentials (mobile/ID and correct password)',
+        () async {
       final user = await repository.login(
         role: UserRole.vhv,
         identifier: '0800000001',
@@ -81,7 +127,7 @@ void main() {
     });
   });
 
-  group('MockNcdRepository - Patient CRUD and Search/Filter', () {
+  group('DriftNcdRepository - Patient CRUD & Search', () {
     test('getPatients retrieves full seeded list', () async {
       final patients = await repository.getPatients();
       expect(patients.length, greaterThanOrEqualTo(6));
@@ -91,26 +137,32 @@ void main() {
       final patientsV001 = await repository.getPatients(villageId: 'V001');
       expect(patientsV001.every((p) => p.villageId == 'V001'), isTrue);
 
-      final patientsNonExistent = await repository.getPatients(villageId: 'V999');
+      final patientsNonExistent =
+          await repository.getPatients(villageId: 'V999');
       expect(patientsNonExistent, isEmpty);
     });
 
-    test('getPatients filters correctly by searchQuery (name and citizen ID)', () async {
-      final resultsByName = await repository.getPatients(searchQuery: 'สมชาย');
+    test('getPatients filters correctly by searchQuery (name and citizen ID)',
+        () async {
+      final resultsByName =
+          await repository.getPatients(searchQuery: 'สมชาย');
       expect(resultsByName.length, equals(1));
       expect(resultsByName.first.patientFname, equals('สมชาย'));
 
-      final resultsById = await repository.getPatients(searchQuery: '1234567890123');
+      final resultsById =
+          await repository.getPatients(searchQuery: '1234567890123');
       expect(resultsById.length, equals(1));
       expect(resultsById.first.patientId, equals('P001'));
     });
 
-    test('getPatientById and getPatientByCitizenId return correct patient', () async {
+    test('getPatientById and getPatientByCitizenId return correct patient',
+        () async {
       final patientById = await repository.getPatientById('P001');
       expect(patientById, isNotNull);
       expect(patientById!.patientFname, equals('สมชาย'));
 
-      final patientByCitizenId = await repository.getPatientByCitizenId('1234567890123');
+      final patientByCitizenId =
+          await repository.getPatientByCitizenId('1234567890123');
       expect(patientByCitizenId, isNotNull);
       expect(patientByCitizenId!.patientId, equals('P001'));
 
@@ -161,7 +213,7 @@ void main() {
     });
   });
 
-  group('MockNcdRepository - VHV Management', () {
+  group('DriftNcdRepository - VHV Management', () {
     test('getVhvs retrieves list and can filter by villageId', () async {
       final allVhvs = await repository.getVhvs();
       expect(allVhvs.length, greaterThanOrEqualTo(3));
@@ -216,26 +268,56 @@ void main() {
     });
   });
 
-  group('MockNcdRepository - Screenings and Nurse Approval', () {
-    test('getScreeningsByPatient returns screenings ordered descending by date', () async {
+  group('DriftNcdRepository - Screenings and Nurse Approval', () {
+    test(
+        'getScreeningsByPatient returns screenings ordered descending by date',
+        () async {
       final screenings = await repository.getScreeningsByPatient('P001');
       expect(screenings.isNotEmpty, isTrue);
       expect(screenings.length, greaterThanOrEqualTo(2));
-      expect(screenings.first.screeningDate.isAfter(screenings.last.screeningDate), isTrue);
+      expect(
+          screenings.first.screeningDate.isAfter(screenings.last.screeningDate),
+          isTrue);
     });
 
-    test('getAllScreenings returns all screenings or filtered by villageId', () async {
+    test('getAllScreenings retrieves all or filtered by villageId', () async {
       final all = await repository.getAllScreenings();
       expect(all.length, greaterThanOrEqualTo(2));
 
-      final v001Screenings = await repository.getAllScreenings(villageId: 'V001');
+      final v001Screenings =
+          await repository.getAllScreenings(villageId: 'V001');
       expect(v001Screenings.length, equals(2));
 
-      final v002Screenings = await repository.getAllScreenings(villageId: 'V002');
+      final v002Screenings =
+          await repository.getAllScreenings(villageId: 'V002');
       expect(v002Screenings, isEmpty);
     });
 
-    test('saveScreening adds a new screening record', () async {
+    test('saveScreening adds a new screening record with relations',
+        () async {
+      final newResults = NcdRiskCalculator.evaluateRisk(
+        screeningId: '',
+        weight: 65,
+        height: 165,
+        bmi: 23.9,
+        waistCm: 78,
+        sbp: 130,
+        dbp: 85,
+        pulse: 75,
+        bloodSugar: 110,
+        gender: 'ชาย',
+      );
+
+      final newHistories = [
+        const ScreeningHistory(
+          historyId: '',
+          screeningId: '',
+          questionId: 'Q001',
+          questionText: '1) ประวัติป่วย/พบแพทย์ด้วยโรค NCDs',
+          answerText: 'ไม่มี',
+        ),
+      ];
+
       final newScreening = Screening(
         screenId: '',
         patientId: 'P003',
@@ -252,8 +334,8 @@ void main() {
         dbp: 85,
         pulse: 75,
         bloodSugar: 110,
-        histories: [],
-        results: [],
+        histories: newHistories,
+        results: newResults,
       );
 
       final saved = await repository.saveScreening(newScreening);
@@ -263,25 +345,42 @@ void main() {
       expect(fetched, isNotNull);
       expect(fetched!.patientId, equals('P003'));
       expect(fetched.reviewStatus, equals(ReviewStatus.pending));
+      expect(fetched.histories.length, equals(1));
+      expect(fetched.results.length, equals(4));
     });
 
-    test('updateScreeningReview approves/rejects screening with nurseId and timestamp', () async {
+    test(
+        'updateScreeningReview approves screening with nurseId and updatedResults',
+        () async {
+      final existing = await repository.getScreeningById('S001');
+      expect(existing, isNotNull);
+      expect(existing!.reviewStatus, equals(ReviewStatus.pending));
+
+      final updatedResults = existing.results
+          .map((r) => r.copyWith(adviceText: 'พยาบาลให้คำแนะนำเพิ่มเติม'))
+          .toList();
+
       final updated = await repository.updateScreeningReview(
         screeningId: 'S001',
         status: ReviewStatus.approved,
         nurseId: 'NUR001',
+        updatedResults: updatedResults,
       );
 
       expect(updated.reviewStatus, equals(ReviewStatus.approved));
       expect(updated.reviewedByNurseId, equals('NUR001'));
       expect(updated.reviewedAt, isNotNull);
+      expect(updated.results.first.adviceText,
+          equals('พยาบาลให้คำแนะนำเพิ่มเติม'));
 
       final fetched = await repository.getScreeningById('S001');
       expect(fetched!.reviewStatus, equals(ReviewStatus.approved));
+      expect(fetched.results.first.adviceText,
+          equals('พยาบาลให้คำแนะนำเพิ่มเติม'));
     });
   });
 
-  group('MockNcdRepository - Villages & Nurse', () {
+  group('DriftNcdRepository - Villages & Nurse', () {
     test('getVillages returns list of 5 seeded villages', () async {
       final villages = await repository.getVillages();
       expect(villages.length, equals(5));

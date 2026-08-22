@@ -4,6 +4,7 @@ import 'package:mobile_app_standard/config/config.dart';
 import 'package:mobile_app_standard/feature/auth/bloc/auth_bloc.dart';
 import 'package:mobile_app_standard/feature/auth/pages/user_type_selection_page.dart';
 import 'package:mobile_app_standard/feature/home/bloc/websocket/websocket_bloc.dart';
+import 'package:mobile_app_standard/feature/nurse/bloc/village_analytics_bloc.dart';
 import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
 import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
 import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
@@ -28,6 +29,7 @@ Future<void> main() async {
         BlocProvider<ScreeningBloc>(create: (context) => locator<ScreeningBloc>()),
         BlocProvider<VhvBloc>(create: (context) => locator<VhvBloc>()),
         BlocProvider<VillageBloc>(create: (context) => locator<VillageBloc>()),
+        BlocProvider<VillageAnalyticsBloc>(create: (context) => locator<VillageAnalyticsBloc>()),
         BlocProvider<TodoBloc>(create: (context) => locator<TodoBloc>()),
         BlocProvider<WebsocketBloc>(create: (context) => locator<WebsocketBloc>()),
         BlocProvider<LanguageBloc>(create: (context) => locator<LanguageBloc>()),

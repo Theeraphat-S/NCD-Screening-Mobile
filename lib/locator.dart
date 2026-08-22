@@ -2,10 +2,13 @@ import 'package:get_it/get_it.dart';
 import 'package:mobile_app_standard/domain/datasource/app_datebase.dart';
 import 'package:mobile_app_standard/domain/http_client/ip.dart';
 import 'package:mobile_app_standard/domain/http_client/websocket.dart';
+import 'package:mobile_app_standard/domain/repositories/drift_ncd_repository.dart';
 import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
 import 'package:mobile_app_standard/domain/repositories/todo_repo.dart';
+import 'package:mobile_app_standard/domain/services/pdf_report_service.dart';
 import 'package:mobile_app_standard/feature/auth/bloc/auth_bloc.dart';
 import 'package:mobile_app_standard/feature/home/bloc/websocket/websocket_bloc.dart';
+import 'package:mobile_app_standard/feature/nurse/bloc/village_analytics_bloc.dart';
 import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
 import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
 import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
@@ -17,21 +20,24 @@ final locator = GetIt.instance;
 
 Future<void> initLocator() async {
   // Register AppDatabase
-  locator.registerLazySingleton<AppDatabase>(() => AppDatabase());
+  locator.registerLazySingleton<AppDatabase>(AppDatabase.new);
 
-  // Register NCD Repository (Offline-first Mock with full seeded data)
+  // Register NCD Repository (Offline-first Drift SQLite database persistence)
   locator.registerLazySingleton<NcdRepositoryInterface>(
-      () => MockNcdRepository());
+      () => DriftNcdRepository(locator<AppDatabase>()));
+
+  // Register PDF Report Service
+  locator.registerLazySingleton<PdfReportServiceInterface>(PdfReportService.new);
 
   // Register Legacy Repository
   locator.registerLazySingleton<TodoRepositoryInterface>(
       () => TodoRepository(locator<AppDatabase>()));
 
   // Register HttpClient
-  locator.registerLazySingleton<IpClient>(() => IpClient());
+  locator.registerLazySingleton<IpClient>(IpClient.new);
 
   // Register WebSocketClient
-  locator.registerLazySingleton<WebSocketClient>(() => WebSocketClient());
+  locator.registerLazySingleton<WebSocketClient>(WebSocketClient.new);
 
   // Register NCD BLoCs
   locator.registerLazySingleton<AuthBloc>(
@@ -44,9 +50,11 @@ Future<void> initLocator() async {
       () => VhvBloc(locator<NcdRepositoryInterface>()));
   locator.registerLazySingleton<VillageBloc>(
       () => VillageBloc(locator<NcdRepositoryInterface>()));
+  locator.registerLazySingleton<VillageAnalyticsBloc>(
+      () => VillageAnalyticsBloc(locator<NcdRepositoryInterface>()));
 
   // Register Misc Blocs
-  locator.registerLazySingleton<TodoBloc>(() => TodoBloc());
-  locator.registerLazySingleton<WebsocketBloc>(() => WebsocketBloc());
-  locator.registerLazySingleton<LanguageBloc>(() => LanguageBloc());
+  locator.registerLazySingleton<TodoBloc>(TodoBloc.new);
+  locator.registerLazySingleton<WebsocketBloc>(WebsocketBloc.new);
+  locator.registerLazySingleton<LanguageBloc>(LanguageBloc.new);
 }
