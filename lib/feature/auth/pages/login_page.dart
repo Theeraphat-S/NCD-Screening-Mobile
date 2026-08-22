@@ -1,0 +1,358 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_app_standard/domain/models/ncd_models.dart';
+import 'package:mobile_app_standard/feature/auth/bloc/auth_bloc.dart';
+import 'package:mobile_app_standard/feature/nurse/pages/nurse_village_list_page.dart';
+import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
+import 'package:mobile_app_standard/feature/patient/pages/patient_history_list_page.dart';
+import 'package:mobile_app_standard/feature/patient/pages/vhv_patient_list_page.dart';
+import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+
+class LoginPage extends StatefulWidget {
+  final UserRole role;
+
+  const LoginPage({super.key, required this.role});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _idController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Pre-fill demo defaults for convenience during review
+    if (widget.role == UserRole.patient) {
+      _idController.text = '1234567890123';
+    } else if (widget.role == UserRole.vhv) {
+      _idController.text = '1111111111111';
+      _passwordController.text = 'password123';
+    } else if (widget.role == UserRole.nurse) {
+      _idController.text = 'NUR001';
+      _passwordController.text = 'password123';
+    }
+  }
+
+  @override
+  void dispose() {
+    _idController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  String get _title {
+    switch (widget.role) {
+      case UserRole.patient:
+        return 'เข้าสู่ระบบ (บุคคลทั่วไป)';
+      case UserRole.vhv:
+        return 'เข้าสู่ระบบ อสม.';
+      case UserRole.nurse:
+        return 'เข้าสู่ระบบพยาบาล';
+    }
+  }
+
+  String get _idLabel {
+    switch (widget.role) {
+      case UserRole.patient:
+        return 'เลขบัตรประชาชน 13 หลัก';
+      case UserRole.vhv:
+        return 'รหัสบัตรประชาชน (13 หลัก)';
+      case UserRole.nurse:
+        return 'Nurse ID / รหัสพยาบาล';
+    }
+  }
+
+  String get _idHint {
+    switch (widget.role) {
+      case UserRole.patient:
+        return 'กรอกเลขบัตรประชาชน';
+      case UserRole.vhv:
+        return 'กรอกเลขบัตรประชาชน 13 หลัก';
+      case UserRole.nurse:
+        return 'กรอกรหัสพยาบาล (เช่น NUR001)';
+    }
+  }
+
+  void _handleLogin() {
+    final id = _idController.text.trim();
+    final password = _passwordController.text;
+
+    // Front-end validations per SRS
+    if (id.isEmpty) {
+      _showWarning('กรุณากรอกข้อมูลให้ถูกต้อง');
+      return;
+    }
+
+    if (widget.role == UserRole.patient) {
+      if (id.length != 13 || int.tryParse(id) == null) {
+        _showWarning('รหัสบัตรประชาชนต้องเป็นตัวเลขความยาว 13 หลัก');
+        return;
+      }
+    } else if (widget.role == UserRole.vhv) {
+      if (id.length != 13 || int.tryParse(id) == null) {
+        _showWarning('รหัสบัตรประชาชนต้องเป็นตัวเลขความยาว 13 หลัก');
+        return;
+      }
+      if (password.isEmpty || password.length < 4 || password.length > 16) {
+        _showWarning('รหัสผ่านต้องมีความยาว 4-16 ตัวอักษร');
+        return;
+      }
+    } else if (widget.role == UserRole.nurse) {
+      if (id.length < 4) {
+        _showWarning('รหัสพยาบาลต้องมี 4 ตัวอักษรขึ้นไป');
+        return;
+      }
+      if (password.isEmpty || password.length < 4 || password.length > 16) {
+        _showWarning('รหัสผ่านต้องมีความยาว 4-16 ตัวอักษร');
+        return;
+      }
+    }
+
+    context.read<AuthBloc>().add(
+          AuthLoginSubmitted(
+            role: widget.role,
+            identifier: id,
+            password: password.isNotEmpty ? password : null,
+          ),
+        );
+  }
+
+  void _showWarning(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: PColor.errorColor,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.status == AuthStatus.error) {
+          _showWarning(state.errorMessage ?? 'เข้าสู่ระบบไม่สำเร็จ');
+        } else if (state.status == AuthStatus.authenticated) {
+          if (widget.role == UserRole.patient && state.currentUser is Patient) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PatientHistoryListPage(patient: state.currentUser as Patient),
+              ),
+            );
+          } else if (widget.role == UserRole.vhv && state.currentUser is VHV) {
+            context.read<PatientBloc>().add(
+                  PatientLoadRequested(villageId: (state.currentUser as VHV).villageId),
+                );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => VhvPatientListPage(vhv: state.currentUser as VHV),
+              ),
+            );
+          } else if (widget.role == UserRole.nurse && state.currentUser is Nurse) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => NurseVillageListPage(nurse: state.currentUser as Nurse),
+              ),
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        backgroundColor: PColor.backgroundColor,
+        appBar: AppBar(
+          backgroundColor: PColor.primaryColor,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Text(
+            _title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 20),
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: PColor.primaryColor.withOpacity(0.08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      widget.role == UserRole.patient
+                          ? Icons.person_rounded
+                          : widget.role == UserRole.vhv
+                              ? Icons.volunteer_activism_rounded
+                              : Icons.medical_services_rounded,
+                      size: 48,
+                      color: PColor.primaryColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  _title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: PColor.primaryDark,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  widget.role == UserRole.patient
+                      ? 'กรุณากรอกรหัสบัตรประจำตัวประชาชนเพื่อยืนยันตัวตน'
+                      : 'กรุณากรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าสู่ระบบ',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: PColor.textNeutralColor,
+                  ),
+                ),
+                const SizedBox(height: 32),
+
+                // Identifier Field
+                Text(
+                  _idLabel,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: PColor.contentColor,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _idController,
+                  keyboardType: widget.role == UserRole.nurse
+                      ? TextInputType.text
+                      : TextInputType.number,
+                  maxLength: widget.role == UserRole.nurse ? null : 13,
+                  decoration: InputDecoration(
+                    hintText: _idHint,
+                    filled: true,
+                    fillColor: Colors.white,
+                    counterText: '',
+                    prefixIcon: const Icon(Icons.badge_outlined, color: PColor.primaryColor),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: PColor.primaryColor, width: 2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Password Field (VHV & Nurse)
+                if (widget.role != UserRole.patient) ...[
+                  const Text(
+                    'รหัสผ่าน',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: PColor.contentColor,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
+                    decoration: InputDecoration(
+                      hintText: 'กรอกรหัสผ่าน',
+                      filled: true,
+                      fillColor: Colors.white,
+                      prefixIcon: const Icon(Icons.lock_outline_rounded, color: PColor.primaryColor),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          color: PColor.textNeutralColor,
+                        ),
+                        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: PColor.primaryColor, width: 2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ] else
+                  const SizedBox(height: 8),
+
+                // Submit Button
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    final isLoading = state.status == AuthStatus.loading;
+                    return ElevatedButton(
+                      onPressed: isLoading ? null : _handleLogin,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: PColor.primaryColor,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: isLoading
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text(
+                              'เข้าสู่ระบบ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

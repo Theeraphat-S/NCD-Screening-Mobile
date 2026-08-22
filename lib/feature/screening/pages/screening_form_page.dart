@@ -1,0 +1,584 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_app_standard/domain/models/ncd_models.dart';
+import 'package:mobile_app_standard/domain/services/ncd_risk_calculator.dart';
+import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
+import 'package:mobile_app_standard/feature/screening/pages/risk_assessment_result_page.dart';
+import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+
+class ScreeningFormPage extends StatefulWidget {
+  final Patient patient;
+  final VHV vhv;
+
+  const ScreeningFormPage({
+    super.key,
+    required this.patient,
+    required this.vhv,
+  });
+
+  @override
+  State<ScreeningFormPage> createState() => _ScreeningFormPageState();
+}
+
+class _ScreeningFormPageState extends State<ScreeningFormPage> {
+  // Biometrics Controllers
+  final _weightController = TextEditingController(text: '60');
+  final _heightController = TextEditingController(text: '175');
+  final _waistController = TextEditingController(text: '72');
+  final _sbpController = TextEditingController(text: '125');
+  final _dbpController = TextEditingController(text: '65');
+  final _pulseController = TextEditingController(text: '72');
+  final _bloodSugarController = TextEditingController(text: '100');
+
+  // Questionnaire States
+  String _q1PersonalNcd = 'ไม่มี'; // มี / ไม่มี / ไม่ทราบ
+  final List<String> _selectedPersonalNcds = [];
+  String _q2DrugAllergy = 'ไม่ทราบ';
+  String _q3FoodAllergy = 'ไม่ทราบ';
+  String _q4FamilyNcd = 'ไม่ทราบ';
+
+  double get _calculatedBmi {
+    final w = double.tryParse(_weightController.text) ?? 0.0;
+    final h = double.tryParse(_heightController.text) ?? 0.0;
+    return NcdRiskCalculator.calculateBmi(w, h);
+  }
+
+  @override
+  void dispose() {
+    _weightController.dispose();
+    _heightController.dispose();
+    _waistController.dispose();
+    _sbpController.dispose();
+    _dbpController.dispose();
+    _pulseController.dispose();
+    _bloodSugarController.dispose();
+    super.dispose();
+  }
+
+  void _onSubmit() {
+    final weight = double.tryParse(_weightController.text) ?? 0.0;
+    final height = double.tryParse(_heightController.text) ?? 0.0;
+    final waist = double.tryParse(_waistController.text) ?? 0.0;
+    final sbp = double.tryParse(_sbpController.text) ?? 0.0;
+    final dbp = double.tryParse(_dbpController.text) ?? 0.0;
+    final pulse = double.tryParse(_pulseController.text) ?? 0.0;
+    final bloodSugar = double.tryParse(_bloodSugarController.text) ?? 0.0;
+
+    if (weight <= 0 || height <= 0 || waist <= 0 || sbp <= 0 || dbp <= 0 || pulse <= 0 || bloodSugar <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('ข้อมูลไม่ถูกต้อง กรุณากรอกตัวเลขค่าตรวจวัดให้ครบถ้วน'),
+          backgroundColor: PColor.errorColor,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    final screeningId = 'S${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+    final bmi = NcdRiskCalculator.calculateBmi(weight, height);
+
+    final histories = [
+      ScreeningHistory(
+        historyId: '${screeningId}_H1',
+        screeningId: screeningId,
+        questionId: 'Q001',
+        questionText: '1) ประวัติเจ็บป่วย/พบแพทย์ด้วยโรค NCDs',
+        answerText: _q1PersonalNcd == 'มี'
+            ? 'มี (${_selectedPersonalNcds.join(', ')})'
+            : _q1PersonalNcd,
+      ),
+      ScreeningHistory(
+        historyId: '${screeningId}_H2',
+        screeningId: screeningId,
+        questionId: 'Q002',
+        questionText: '2) ประวัติแพ้ยา',
+        answerText: _q2DrugAllergy,
+      ),
+      ScreeningHistory(
+        historyId: '${screeningId}_H3',
+        screeningId: screeningId,
+        questionId: 'Q003',
+        questionText: '3) ประวัติแพ้อาหาร',
+        answerText: _q3FoodAllergy,
+      ),
+      ScreeningHistory(
+        historyId: '${screeningId}_H4',
+        screeningId: screeningId,
+        questionId: 'Q004',
+        questionText: '4) ญาติตรงสาย (พ่อ/แม่/พี่/น้อง) ป่วยเป็นโรค NCDs',
+        answerText: _q4FamilyNcd,
+      ),
+    ];
+
+    final results = NcdRiskCalculator.evaluateRisk(
+      screeningId: screeningId,
+      weight: weight,
+      height: height,
+      bmi: bmi,
+      waistCm: waist,
+      sbp: sbp,
+      dbp: dbp,
+      pulse: pulse,
+      bloodSugar: bloodSugar,
+      gender: widget.patient.patientGender,
+      hasDirectFamilyNcd: _q4FamilyNcd == 'มี',
+      hasPersonalNcd: _q1PersonalNcd == 'มี',
+      personalNcdDetail: _selectedPersonalNcds.join(', '),
+    );
+
+    final newScreening = Screening(
+      screenId: screeningId,
+      patientId: widget.patient.patientId,
+      vhvId: widget.vhv.vhvId,
+      screeningDate: DateTime.now(),
+      ageAtScreening: widget.patient.age,
+      createdAt: DateTime.now(),
+      reviewStatus: ReviewStatus.pending,
+      weight: weight,
+      height: height,
+      bmi: bmi,
+      waistCm: waist,
+      sbp: sbp,
+      dbp: dbp,
+      pulse: pulse,
+      bloodSugar: bloodSugar,
+      histories: histories,
+      results: results,
+    );
+
+    context.read<ScreeningBloc>().add(ScreeningSaveRequested(newScreening));
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => RiskAssessmentResultPage(
+          patient: widget.patient,
+          screening: newScreening,
+          vhv: widget.vhv,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: PColor.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: PColor.primaryColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'แบบฟอร์มคัดกรองโรค',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Stepper Bar matching SRS Fig 3.20 & 5.9
+              _buildStepIndicator(),
+              const SizedBox(height: 18),
+
+              // Section 1: Vital Signs & Biometrics
+              _buildSectionCard(
+                title: 'ตอนที่ 1: สัญญาณชีพ / ค่าตรวจวัดร่างกาย',
+                icon: Icons.favorite_outline_rounded,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildBiometricField(
+                            controller: _weightController,
+                            label: 'น้ำหนัก (kg)',
+                            hint: 'เช่น 60',
+                            onChanged: (_) => setState(() {}),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildBiometricField(
+                            controller: _heightController,
+                            label: 'ส่วนสูง (cm)',
+                            hint: 'เช่น 175',
+                            onChanged: (_) => setState(() {}),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Auto BMI Banner
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: PColor.primaryColor.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'ดัชนีมวลกาย (BMI คำนวณอัตโนมัติ):',
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: PColor.primaryDark),
+                          ),
+                          Text(
+                            '$_calculatedBmi kg/m²',
+                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: PColor.primaryColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    _buildBiometricField(
+                      controller: _waistController,
+                      label: 'รอบเอว (cm)',
+                      hint: 'เช่น 72',
+                    ),
+                    const SizedBox(height: 12),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildBiometricField(
+                            controller: _sbpController,
+                            label: 'ความดันตัวบน SBP (mmHg)',
+                            hint: 'เช่น 125',
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildBiometricField(
+                            controller: _dbpController,
+                            label: 'ความดันตัวล่าง DBP (mmHg)',
+                            hint: 'เช่น 65',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildBiometricField(
+                            controller: _pulseController,
+                            label: 'ชีพจร PULSE (ครั้ง/นาที)',
+                            hint: 'เช่น 72',
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildBiometricField(
+                            controller: _bloodSugarController,
+                            label: 'ระดับน้ำตาลในเลือด (mg/dL)',
+                            hint: 'เช่น 100',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Section 2: Medical History & Family Questionnaire
+              _buildSectionCard(
+                title: 'ตอนที่ 2: ประวัติครอบครัว / การแพ้',
+                icon: Icons.family_restroom_rounded,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Question 1
+                    _buildQuestionTitle('1) ท่านมีประวัติการเจ็บป่วย/พบแพทย์ด้วยโรค NCDs หรือไม่:'),
+                    _buildRadioGroup(
+                      value: _q1PersonalNcd,
+                      options: const ['มี', 'ไม่มี', 'ไม่ทราบ'],
+                      onChanged: (val) => setState(() => _q1PersonalNcd = val!),
+                    ),
+                    if (_q1PersonalNcd == 'มี') ...[
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8.0, top: 4.0, bottom: 6.0),
+                        child: Text(
+                          'เลือกโรคที่ป่วย (เลือกได้มากกว่า 1 ข้อ):',
+                          style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: PColor.primaryDark),
+                        ),
+                      ),
+                      ...['โรคเบาหวาน', 'โรคความดันโลหิตสูง', 'โรคหลอดเลือดหัวใจ', 'โรคอ้วนลงพุง'].map(
+                        (disease) => CheckboxListTile(
+                          dense: true,
+                          title: Text(disease, style: const TextStyle(fontSize: 13.5)),
+                          value: _selectedPersonalNcds.contains(disease),
+                          activeColor: PColor.primaryColor,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          contentPadding: EdgeInsets.zero,
+                          onChanged: (checked) {
+                            setState(() {
+                              if (checked == true) {
+                                _selectedPersonalNcds.add(disease);
+                              } else {
+                                _selectedPersonalNcds.remove(disease);
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                    const Divider(height: 24),
+
+                    // Question 2
+                    _buildQuestionTitle('2) ท่านมีประวัติแพ้ยาหรือไม่:'),
+                    _buildRadioGroup(
+                      value: _q2DrugAllergy,
+                      options: const ['มี', 'ไม่มี', 'ไม่ทราบ'],
+                      onChanged: (val) => setState(() => _q2DrugAllergy = val!),
+                    ),
+                    const Divider(height: 24),
+
+                    // Question 3
+                    _buildQuestionTitle('3) ท่านมีประวัติแพ้อาหารหรือไม่:'),
+                    _buildRadioGroup(
+                      value: _q3FoodAllergy,
+                      options: const ['มี', 'ไม่มี', 'ไม่ทราบ'],
+                      onChanged: (val) => setState(() => _q3FoodAllergy = val!),
+                    ),
+                    const Divider(height: 24),
+
+                    // Question 4
+                    _buildQuestionTitle('4) ญาติตรงสาย (พ่อ/แม่/พี่/น้อง) ป่วยเป็นโรค NCDs หรือไม่:'),
+                    _buildRadioGroup(
+                      value: _q4FamilyNcd,
+                      options: const ['มี', 'ไม่มี', 'ไม่ทราบ'],
+                      onChanged: (val) => setState(() => _q4FamilyNcd = val!),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Submit Button
+              ElevatedButton.icon(
+                onPressed: _onSubmit,
+                icon: const Icon(Icons.analytics_outlined, color: Colors.white),
+                label: const Text(
+                  'บันทึกและประเมินความเสี่ยง',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: PColor.primaryColor,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  elevation: 3,
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStepIndicator() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildStepItem(number: '1', label: 'ข้อมูลผู้ป่วย', isDone: true),
+          _buildStepLine(isActive: true),
+          _buildStepItem(number: '2', label: 'แบบคัดกรอง', isActive: true),
+          _buildStepLine(isActive: false),
+          _buildStepItem(number: '3', label: 'แนวโน้มความเสี่ยง', isActive: false),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStepItem({
+    required String number,
+    required String label,
+    bool isActive = false,
+    bool isDone = false,
+  }) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 14,
+          backgroundColor: (isActive || isDone) ? PColor.primaryColor : Colors.grey.shade300,
+          child: isDone
+              ? const Icon(Icons.check, size: 14, color: Colors.white)
+              : Text(
+                  number,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: (isActive || isDone) ? Colors.white : Colors.grey.shade700,
+                  ),
+                ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+            color: isActive ? PColor.primaryDark : PColor.textNeutralColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStepLine({required bool isActive}) {
+    return Expanded(
+      child: Container(
+        height: 2,
+        margin: const EdgeInsets.only(bottom: 14),
+        color: isActive ? PColor.primaryColor : Colors.grey.shade300,
+      ),
+    );
+  }
+
+  Widget _buildSectionCard({
+    required String title,
+    required IconData icon,
+    required Widget child,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: PColor.primaryColor, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 15.5,
+                  fontWeight: FontWeight.bold,
+                  color: PColor.primaryDark,
+                ),
+              ),
+            ],
+          ),
+          const Divider(height: 20),
+          child,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBiometricField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    ValueChanged<String>? onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: PColor.contentColor),
+        ),
+        const SizedBox(height: 6),
+        TextFormField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            hintText: hint,
+            filled: true,
+            fillColor: Colors.grey.shade50,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: PColor.primaryColor, width: 1.8),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuestionTitle(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 13.5,
+        fontWeight: FontWeight.w600,
+        color: PColor.contentColor,
+      ),
+    );
+  }
+
+  Widget _buildRadioGroup({
+    required String value,
+    required List<String> options,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Row(
+      children: options.map((opt) {
+        return Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Radio<String>(
+                value: opt,
+                groupValue: value,
+                activeColor: PColor.primaryColor,
+                onChanged: onChanged,
+              ),
+              Text(opt, style: const TextStyle(fontSize: 13)),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
