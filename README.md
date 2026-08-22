@@ -58,6 +58,7 @@
 - **State Management**: BLoC Pattern (`flutter_bloc`)
 - **Dependency Injection**: Service Locator (`get_it`)
 - **Local Database (Persistence)**: [Drift](https://drift.simonbinder.eu/) SQLite Database (`AppDatabase`) รองรับการทำงานแบบ Offline-First 100% พร้อม Auto-Seed ข้อมูลตัวอย่างเริ่มต้น
+- **Design System**: [DESIGN.md](DESIGN.md) — ระบบดีไซน์ **Nordic Clinical Precision** (Medical Teal `#0D9488`, Slate Neutrals, Ambient Diffusion Shadows และ WCAG AA Calibrated Risk Badges)
 - **PDF Engine**: `PdfReportService` สร้างรายงานสรุปผลสุขภาพภาษาไทย 7 ส่วน ด้วยฟอนต์มาตรฐาน Sarabun และปี พ.ศ.
 - **Analytics Engine**: Pure Dart Domain Service (`VillageAnalyticsCalculator`) คำนวณสถิติและจัดคิวกลุ่มเสี่ยงชุมชน
 - **Calculation Engine**: Pure Dart Domain Service (`NcdRiskCalculator`) คำนวณความเสี่ยง Real-time ตามเกณฑ์มาตรฐานกระทรวงสาธารณสุข
@@ -88,6 +89,18 @@ flutter test
 
 ---
 
+## 🎨 ระบบดีไซน์ (Design System)
+
+แอปพลิเคชันได้รับการออกแบบตามข้อกำหนดใน [DESIGN.md](DESIGN.md):
+- **ธีมสีหลัก**: Medical Teal 600 (`#0D9488`), Teal Dark 800 (`#115E59`), Teal Light (`#CCFBF1`)
+- **พื้นผิวและตัวอักษร**: Slate 50 Background (`#F8FAFC`), Slate 900 Typography (`#0F172A`), Slate 200 Borders (`#E2E8F0`)
+- **ระดับความเสี่ยงตามมาตรฐานสาธารณสุข**:
+  - เสี่ยงต่ำ (Low): Emerald-600 (`#059669`) / Emerald-50 Bg (`#ECFDF5`)
+  - เสี่ยงปานกลาง (Moderate): Amber-600 (`#D97706`) / Amber-50 Bg (`#FFFBEB`)
+  - เสี่ยงสูง (High): Red-600 (`#DC2626`) / Red-50 Bg (`#FEF2F2`)
+
+---
+
 ## 🔑 ข้อมูลสำหรับทดสอบเข้าใช้งาน (Demo Credentials)
 
 | Role | Identifier / User ID | Password |
@@ -114,16 +127,19 @@ lib/
 │   ├── screening/       # Screening Form (Part 1 & 2), Risk Views, PDF Preview & ScreeningBloc
 │   ├── vhv/             # VHV Management & VhvBloc
 │   └── nurse/           # Village Overview, Analytics Dashboard, VHV Admin & Nurse Approval Flow
-├── shared/              # Reusable UI tokens, styles, components
-└── main.dart            # MultiBlocProvider & Application Root
+├── shared/              # Reusable UI tokens, styles, components (PColor, PShadow, PRadius)
+└── main.dart            # MultiBlocProvider, Global Theme & Application Root
 ```
 
 ---
 
 ## 📄 เอกสารอ้างอิงและบันทึกการตัดสินใจ (ADRs & Context)
 - [CONTEXT.md](CONTEXT.md): พจนานุกรมคำศัพท์และนิยามเชิงโดเมน (Domain Glossary)
+- [DESIGN.md](DESIGN.md): ข้อกำหนดระบบดีไซน์และโทเค็น (Design System Specifications)
 - [ADR 0001: Offline-First Repository Architecture](docs/adr/0001-offline-mock-repository-architecture.md)
 - [ADR 0002: Client-Side NCD Risk Engine](docs/adr/0002-client-side-ncd-risk-calculator.md)
 - [ADR 0003: Drift SQLite Offline-First Persistence](docs/adr/0003-drift-sqlite-offline-persistence.md)
 - [ADR 0004: Thai PDF Clinical Report Generation](docs/adr/0004-thai-pdf-clinical-report-generation.md)
 - [ADR 0005: Nurse Village Health Analytics Engine](docs/adr/0005-village-health-analytics-engine.md)
+- [ADR 0006: Nordic Clinical Precision UI System Redesign](docs/adr/0006-nordic-clinical-ui-redesign.md)
+

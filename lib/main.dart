@@ -56,15 +56,72 @@ class NcdScreeningApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(
               seedColor: PColor.primaryColor,
               primary: PColor.primaryColor,
+              secondary: PColor.secondaryColor,
+              surface: PColor.neutralColor,
+              background: PColor.backgroundColor,
+              error: PColor.errorColor,
             ),
             scaffoldBackgroundColor: PColor.backgroundColor,
             appBarTheme: const AppBarTheme(
               backgroundColor: PColor.primaryColor,
               foregroundColor: Colors.white,
               elevation: 0,
+              centerTitle: true,
+              titleTextStyle: TextStyle(
+                fontFamily: 'Sarabun',
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            cardTheme: CardTheme(
+              color: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(color: PColor.borderSubtle, width: 1),
+              ),
+              margin: EdgeInsets.zero,
+            ),
+            inputDecorationTheme: InputDecorationTheme(
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: PColor.borderSubtle),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: PColor.borderSubtle),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: PColor.primaryColor, width: 1.5),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: PColor.errorColor),
+              ),
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: PColor.primaryColor,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                textStyle: const TextStyle(
+                  fontFamily: 'Sarabun',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             useMaterial3: true,
-            fontFamily: 'Sarabun', // or system default Thai font
+            fontFamily: 'Sarabun',
           ),
           home: const UserTypeSelectionPage(),
         );

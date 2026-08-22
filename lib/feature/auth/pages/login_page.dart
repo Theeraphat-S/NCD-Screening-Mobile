@@ -185,170 +185,193 @@ class _LoginPageState extends State<LoginPage> {
           centerTitle: true,
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 20),
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: PColor.primaryColor.withOpacity(0.08),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      widget.role == UserRole.patient
-                          ? Icons.person_rounded
-                          : widget.role == UserRole.vhv
-                              ? Icons.volunteer_activism_rounded
-                              : Icons.medical_services_rounded,
-                      size: 48,
-                      color: PColor.primaryColor,
-                    ),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 440),
+                child: Container(
+                  padding: const EdgeInsets.all(28.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: PColor.borderSubtle),
+                    boxShadow: PShadow.card,
                   ),
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  _title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: PColor.primaryDark,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  widget.role == UserRole.patient
-                      ? 'กรุณากรอกรหัสบัตรประจำตัวประชาชนเพื่อยืนยันตัวตน'
-                      : 'กรุณากรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าสู่ระบบ',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: PColor.textNeutralColor,
-                  ),
-                ),
-                const SizedBox(height: 32),
-
-                // Identifier Field
-                Text(
-                  _idLabel,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: PColor.contentColor,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _idController,
-                  keyboardType: widget.role == UserRole.nurse
-                      ? TextInputType.text
-                      : TextInputType.number,
-                  maxLength: widget.role == UserRole.nurse ? null : 13,
-                  decoration: InputDecoration(
-                    hintText: _idHint,
-                    filled: true,
-                    fillColor: Colors.white,
-                    counterText: '',
-                    prefixIcon: const Icon(Icons.badge_outlined, color: PColor.primaryColor),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: PColor.primaryColor, width: 2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Password Field (VHV & Nurse)
-                if (widget.role != UserRole.patient) ...[
-                  const Text(
-                    'รหัสผ่าน',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: PColor.contentColor,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    decoration: InputDecoration(
-                      hintText: 'กรอกรหัสผ่าน',
-                      filled: true,
-                      fillColor: Colors.white,
-                      prefixIcon: const Icon(Icons.lock_outline_rounded, color: PColor.primaryColor),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            color: PColor.primaryLight,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: PColor.primaryColor.withOpacity(0.2)),
+                          ),
+                          child: Icon(
+                            widget.role == UserRole.patient
+                                ? Icons.person_rounded
+                                : widget.role == UserRole.vhv
+                                    ? Icons.volunteer_activism_rounded
+                                    : Icons.medical_services_rounded,
+                            size: 36,
+                            color: PColor.primaryColor,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        _title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: PColor.contentColor,
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        widget.role == UserRole.patient
+                            ? 'กรุณากรอกรหัสบัตรประจำตัวประชาชนเพื่อยืนยันตัวตน'
+                            : 'กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบการทำงาน',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 13,
                           color: PColor.textNeutralColor,
+                          height: 1.3,
                         ),
-                        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: PColor.primaryColor, width: 2),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                ] else
-                  const SizedBox(height: 8),
+                      const SizedBox(height: 28),
 
-                // Submit Button
-                BlocBuilder<AuthBloc, AuthState>(
-                  builder: (context, state) {
-                    final isLoading = state.status == AuthStatus.loading;
-                    return ElevatedButton(
-                      onPressed: isLoading ? null : _handleLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: PColor.primaryColor,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                      // Identifier Field
+                      Text(
+                        _idLabel,
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w600,
+                          color: PColor.contentColor,
                         ),
-                        elevation: 2,
                       ),
-                      child: isLoading
-                          ? const SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.5,
-                                color: Colors.white,
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _idController,
+                        keyboardType: widget.role == UserRole.nurse
+                            ? TextInputType.text
+                            : TextInputType.number,
+                        maxLength: widget.role == UserRole.nurse ? null : 13,
+                        decoration: InputDecoration(
+                          hintText: _idHint,
+                          hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 14),
+                          filled: true,
+                          fillColor: PColor.backgroundColor,
+                          counterText: '',
+                          prefixIcon: const Icon(Icons.badge_outlined, color: PColor.primaryColor, size: 22),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: PColor.borderSubtle),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: PColor.borderSubtle),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Password Field (VHV & Nurse)
+                      if (widget.role != UserRole.patient) ...[
+                        const Text(
+                          'รหัสผ่าน',
+                          style: TextStyle(
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w600,
+                            color: PColor.contentColor,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: _obscurePassword,
+                          decoration: InputDecoration(
+                            hintText: 'กรอกรหัสผ่าน',
+                            hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 14),
+                            filled: true,
+                            fillColor: PColor.backgroundColor,
+                            prefixIcon: const Icon(Icons.lock_outline_rounded, color: PColor.primaryColor, size: 22),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                                color: PColor.textNeutralColor,
+                                size: 20,
                               ),
-                            )
-                          : const Text(
-                              'เข้าสู่ระบบ',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                             ),
-                    );
-                  },
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: PColor.borderSubtle),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: PColor.borderSubtle),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                      ] else
+                        const SizedBox(height: 12),
+
+                      // Submit Button
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, state) {
+                          final isLoading = state.status == AuthStatus.loading;
+                          return SizedBox(
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: isLoading ? null : _handleLogin,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: PColor.primaryColor,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: isLoading
+                                  ? const SizedBox(
+                                      width: 22,
+                                      height: 22,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.2,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'เข้าสู่ระบบ',
+                                      style: TextStyle(
+                                        fontSize: 15.5,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: -0.2,
+                                      ),
+                                    ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
           ),
         ),

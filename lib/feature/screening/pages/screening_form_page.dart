@@ -400,10 +400,12 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
 
   Widget _buildStepIndicator() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: PColor.borderSubtle),
+        boxShadow: PShadow.card,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -412,7 +414,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
           _buildStepLine(isActive: true),
           _buildStepItem(number: '2', label: 'แบบคัดกรอง', isActive: true),
           _buildStepLine(isActive: false),
-          _buildStepItem(number: '3', label: 'แนวโน้มความเสี่ยง', isActive: false),
+          _buildStepItem(number: '3', label: 'ผลการประเมิน', isActive: false),
         ],
       ),
     );
@@ -426,27 +428,41 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
   }) {
     return Column(
       children: [
-        CircleAvatar(
-          radius: 14,
-          backgroundColor: (isActive || isDone) ? PColor.primaryColor : Colors.grey.shade300,
-          child: isDone
-              ? const Icon(Icons.check, size: 14, color: Colors.white)
-              : Text(
-                  number,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: (isActive || isDone) ? Colors.white : Colors.grey.shade700,
+        Container(
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isDone
+                ? PColor.primaryColor
+                : isActive
+                    ? PColor.primaryLight
+                    : PColor.surfaceSubtle,
+            border: Border.all(
+              color: (isActive || isDone) ? PColor.primaryColor : PColor.borderSubtle,
+              width: 1.5,
+            ),
+          ),
+          child: Center(
+            child: isDone
+                ? const Icon(Icons.check, size: 16, color: Colors.white)
+                : Text(
+                    number,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: isActive ? PColor.primaryDark : PColor.textNeutralColor,
+                    ),
                   ),
-                ),
+          ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 5),
         Text(
           label,
           style: TextStyle(
-            fontSize: 11,
-            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-            color: isActive ? PColor.primaryDark : PColor.textNeutralColor,
+            fontSize: 11.5,
+            fontWeight: (isActive || isDone) ? FontWeight.w700 : FontWeight.w500,
+            color: (isActive || isDone) ? PColor.contentColor : PColor.textNeutralColor,
           ),
         ),
       ],
@@ -457,8 +473,8 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
     return Expanded(
       child: Container(
         height: 2,
-        margin: const EdgeInsets.only(bottom: 14),
-        color: isActive ? PColor.primaryColor : Colors.grey.shade300,
+        margin: const EdgeInsets.only(bottom: 18),
+        color: isActive ? PColor.primaryColor : PColor.borderSubtle,
       ),
     );
   }
@@ -469,36 +485,39 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
     required Widget child,
   }) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: PColor.borderSubtle),
+        boxShadow: PShadow.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, color: PColor.primaryColor, size: 20),
-              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: PColor.primaryLight,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: PColor.primaryColor, size: 20),
+              ),
+              const SizedBox(width: 12),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 15.5,
-                  fontWeight: FontWeight.bold,
-                  color: PColor.primaryDark,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: PColor.contentColor,
+                  letterSpacing: -0.2,
                 ),
               ),
             ],
           ),
-          const Divider(height: 20),
+          const Divider(height: 24, color: PColor.borderSubtle),
           child,
         ],
       ),
@@ -525,20 +544,21 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
           onChanged: onChanged,
           decoration: InputDecoration(
             hintText: hint,
+            hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 13.5),
             filled: true,
-            fillColor: Colors.grey.shade50,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            fillColor: PColor.backgroundColor,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: PColor.borderSubtle),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: PColor.borderSubtle),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: PColor.primaryColor, width: 1.8),
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: PColor.primaryColor, width: 1.5),
             ),
           ),
         ),
@@ -550,9 +570,10 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
     return Text(
       text,
       style: const TextStyle(
-        fontSize: 13.5,
+        fontSize: 14,
         fontWeight: FontWeight.w600,
         color: PColor.contentColor,
+        height: 1.3,
       ),
     );
   }
@@ -562,23 +583,43 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
     required List<String> options,
     required ValueChanged<String?> onChanged,
   }) {
-    return Row(
-      children: options.map((opt) {
-        return Expanded(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Radio<String>(
-                value: opt,
-                groupValue: value,
-                activeColor: PColor.primaryColor,
-                onChanged: onChanged,
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+      child: Row(
+        children: options.map((opt) {
+          final isSelected = value == opt;
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: () => onChanged(opt),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isSelected ? PColor.primaryLight : PColor.surfaceSubtle,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: isSelected ? PColor.primaryColor : PColor.borderSubtle,
+                      width: isSelected ? 1.5 : 1,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      opt,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        color: isSelected ? PColor.primaryDark : PColor.textSecondary,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              Text(opt, style: const TextStyle(fontSize: 13)),
-            ],
-          ),
-        );
-      }).toList(),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }

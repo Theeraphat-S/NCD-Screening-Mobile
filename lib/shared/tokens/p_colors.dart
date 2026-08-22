@@ -1,22 +1,39 @@
 import 'package:flutter/material.dart';
+export 'p_shadow.dart';
 
 class PColor {
-  static const Color primaryColor = Color(0xFF5B34B9); // NCD App Purple
-  static const Color primaryDark = Color(0xFF45229B);
-  static const Color primaryLight = Color(0xFF7E57C2);
-  static const Color secondaryColor = Color(0xFF651FFF);
-  static const Color backgroundColor = Color(0xFFF6F7FA);
-  static const Color neutralColor = Color(0xFFFFFFFF);
-  static const Color textNeutralColor = Color(0xFF757575);
-  static const Color contentColor = Color(0xFF1E293B);
-  static const Color errorColor = Color(0xFFE53935);
+  // Brand & Dominant Clinical Primary (Teal & Sky Medical Palette)
+  static const Color primaryColor = Color(0xFF0D9488); // Teal 600
+  static const Color primaryDark = Color(0xFF115E59); // Teal 800
+  static const Color primaryLight = Color(0xFFCCFBF1); // Teal 100
+  static const Color secondaryColor = Color(0xFF0284C7); // Sky 600
+  
+  // Surfaces & Backgrounds
+  static const Color backgroundColor = Color(0xFFF8FAFC); // Slate 50
+  static const Color neutralColor = Color(0xFFFFFFFF); // Pure White
+  static const Color surfaceSubtle = Color(0xFFF1F5F9); // Slate 100
+  
+  // Typography & Borders
+  static const Color textNeutralColor = Color(0xFF64748B); // Slate 500
+  static const Color textSecondary = Color(0xFF475569); // Slate 600
+  static const Color contentColor = Color(0xFF0F172A); // Slate 900
+  static const Color borderSubtle = Color(0xFFE2E8F0); // Slate 200
+  static const Color borderStrong = Color(0xFFCBD5E1); // Slate 300
+  static const Color errorColor = Color(0xFFDC2626); // Red 600
 
-  // Status colors
-  static const Color riskLow = Color(0xFF2E7D32); // Green
-  static const Color riskModerate = Color(0xFFEF6C00); // Orange
-  static const Color riskHigh = Color(0xFFC62828); // Red
-  static const Color statusPending = Color(0xFFE65100); // Orange-Amber
-  static const Color statusApproved = Color(0xFF2E7D32); // Green
+  // Calibrated Clinical Risk Tokens (WCAG AA Compliant)
+  static const Color riskLow = Color(0xFF059669); // Emerald 600
+  static const Color riskLowBg = Color(0xFFECFDF5); // Emerald 50
+  static const Color riskModerate = Color(0xFFD97706); // Amber 600
+  static const Color riskModerateBg = Color(0xFFFFFBEB); // Amber 50
+  static const Color riskHigh = Color(0xFFDC2626); // Red 600
+  static const Color riskHighBg = Color(0xFFFEF2F2); // Red 50
+
+  // Review & Workflow Status Indicators
+  static const Color statusPending = Color(0xFFEA580C); // Orange 600
+  static const Color statusPendingBg = Color(0xFFFFEDD5); // Orange 100
+  static const Color statusApproved = Color(0xFF059669); // Emerald 600
+  static const Color statusApprovedBg = Color(0xFFECFDF5); // Emerald 50
 
   static Color getRiskColor(String? risk) {
     if (risk == null) return riskLow;
@@ -25,4 +42,13 @@ class PColor {
     if (lower.contains('ปานกลาง') || lower.contains('moderate')) return riskModerate;
     return riskLow;
   }
+
+  static Color getRiskBgColor(String? risk) {
+    if (risk == null) return riskLowBg;
+    final lower = risk.toLowerCase();
+    if (lower.contains('สูง') || lower.contains('high')) return riskHighBg;
+    if (lower.contains('ปานกลาง') || lower.contains('moderate')) return riskModerateBg;
+    return riskLowBg;
+  }
 }
+

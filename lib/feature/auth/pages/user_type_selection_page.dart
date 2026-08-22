@@ -13,103 +13,128 @@ class UserTypeSelectionPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 36.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 30),
-              // Hospital / MOPH Emblem Container
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 16,
-                      offset: const Offset(0, 4),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 480),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 12),
+                  // Hospital / MOPH Emblem Container with Nordic Clinical Styling
+                  Container(
+                    width: 104,
+                    height: 104,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(color: PColor.borderSubtle, width: 1.5),
+                      boxShadow: PShadow.card,
                     ),
-                  ],
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.local_hospital_rounded,
-                    size: 64,
-                    color: PColor.primaryColor,
+                    child: Center(
+                      child: Container(
+                        width: 76,
+                        height: 76,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: PColor.primaryLight,
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.local_hospital_rounded,
+                            size: 44,
+                            color: PColor.primaryColor,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 28),
-              const Text(
-                'คัดกรองความเสี่ยง\n4 โรคไม่ติดต่อเรื้อรัง',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: PColor.primaryColor,
-                  height: 1.3,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'รพ.สต.แม่อาย จ.เชียงใหม่',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: PColor.textNeutralColor,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                decoration: BoxDecoration(
-                  color: PColor.primaryLight.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  'เลือกประเภทผู้ใช้งานเพื่อเข้าสู่ระบบ',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: PColor.primaryDark,
-                    fontWeight: FontWeight.w600,
+                  const SizedBox(height: 24),
+                  const Text(
+                    'คัดกรองความเสี่ยง\n4 โรคไม่ติดต่อเรื้อรัง',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: PColor.contentColor,
+                      height: 1.3,
+                      letterSpacing: -0.3,
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 48),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.location_on_outlined, size: 16, color: PColor.textNeutralColor),
+                      const SizedBox(width: 4),
+                      const Text(
+                        'รพ.สต.แม่อาย จ.เชียงใหม่',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: PColor.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: PColor.surfaceSubtle,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: PColor.borderSubtle),
+                    ),
+                    child: const Text(
+                      'เลือกประเภทผู้ใช้งานเพื่อเข้าสู่ระบบ',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: PColor.textSecondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 36),
 
-              // Role Option 1: Patient (บุคคลทั่วไป)
-              _buildRoleCard(
-                context: context,
-                role: UserRole.patient,
-                title: 'บุคคลทั่วไป',
-                subtitle: 'เข้าดูประวัติและผลการคัดกรองสุขภาพของตนเอง',
-                icon: Icons.person_outline_rounded,
-              ),
-              const SizedBox(height: 16),
+                  // Role Option 1: Patient (บุคคลทั่วไป)
+                  _buildRoleCard(
+                    context: context,
+                    role: UserRole.patient,
+                    title: 'บุคคลทั่วไป',
+                    subtitle: 'เข้าดูประวัติและผลการคัดกรองสุขภาพของตนเอง',
+                    icon: Icons.person_outline_rounded,
+                    accentColor: const Color(0xFF0284C7),
+                    accentBg: const Color(0xFFE0F2FE),
+                  ),
+                  const SizedBox(height: 14),
 
-              // Role Option 2: VHV (อสม.)
-              _buildRoleCard(
-                context: context,
-                role: UserRole.vhv,
-                title: 'สำหรับ อสม.',
-                subtitle: 'บันทึกข้อมูลผู้ป่วยและทำแบบคัดกรองสุขภาพในชุมชน',
-                icon: Icons.volunteer_activism_outlined,
-              ),
-              const SizedBox(height: 16),
+                  // Role Option 2: VHV (อสม.)
+                  _buildRoleCard(
+                    context: context,
+                    role: UserRole.vhv,
+                    title: 'สำหรับ อสม.',
+                    subtitle: 'บันทึกข้อมูลผู้ป่วยและทำแบบคัดกรองสุขภาพในชุมชน',
+                    icon: Icons.volunteer_activism_outlined,
+                    accentColor: PColor.primaryColor,
+                    accentBg: PColor.primaryLight,
+                  ),
+                  const SizedBox(height: 14),
 
-              // Role Option 3: Nurse (พยาบาล)
-              _buildRoleCard(
-                context: context,
-                role: UserRole.nurse,
-                title: 'สำหรับพยาบาล',
-                subtitle: 'ดูแลข้อมูล อสม. และอนุมัติผลการประเมินความเสี่ยง',
-                icon: Icons.medical_services_outlined,
+                  // Role Option 3: Nurse (พยาบาล)
+                  _buildRoleCard(
+                    context: context,
+                    role: UserRole.nurse,
+                    title: 'สำหรับพยาบาล',
+                    subtitle: 'ดูแลข้อมูล อสม. และอนุมัติผลการประเมินความเสี่ยง',
+                    icon: Icons.medical_services_outlined,
+                    accentColor: const Color(0xFF4F46E5),
+                    accentBg: const Color(0xFFEEF2FF),
+                  ),
+                  const SizedBox(height: 28),
+                ],
               ),
-              const SizedBox(height: 40),
-            ],
+            ),
           ),
         ),
       ),
@@ -122,67 +147,84 @@ class UserTypeSelectionPage extends StatelessWidget {
     required String title,
     required String subtitle,
     required IconData icon,
+    required Color accentColor,
+    required Color accentBg,
   }) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.06),
-      child: InkWell(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        onTap: () {
-          context.read<AuthBloc>().add(AuthSelectRole(role));
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => LoginPage(role: role),
+        border: Border.all(color: PColor.borderSubtle, width: 1),
+        boxShadow: PShadow.card,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            context.read<AuthBloc>().add(AuthSelectRole(role));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => LoginPage(role: role),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+            child: Row(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: accentBg,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(icon, color: accentColor, size: 26),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: PColor.contentColor,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          color: PColor.textNeutralColor,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: PColor.surfaceSubtle,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: PColor.textSecondary,
+                    size: 14,
+                  ),
+                ),
+              ],
             ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-          child: Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: PColor.primaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: PColor.primaryColor, size: 26),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.contentColor,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        color: PColor.textNeutralColor,
-                        height: 1.2,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(
-                Icons.chevron_right_rounded,
-                color: PColor.primaryColor,
-                size: 26,
-              ),
-            ],
           ),
         ),
       ),

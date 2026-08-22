@@ -177,48 +177,59 @@ class PatientDetailPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Top Card with Avatar
+                // Top Card with Avatar & Header
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: PColor.borderSubtle),
+                    boxShadow: PShadow.card,
                   ),
                   child: Column(
                     children: [
-                      CircleAvatar(
-                        radius: 46,
-                        backgroundColor: PColor.primaryLight.withOpacity(0.15),
-                        child: const Icon(Icons.person, size: 54, color: PColor.primaryColor),
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: PColor.primaryLight,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: PColor.primaryColor.withOpacity(0.2), width: 2),
+                        ),
+                        child: Center(
+                          child: Text(
+                            currentPatient.patientFname.isNotEmpty ? currentPatient.patientFname.substring(0, 1) : 'P',
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w700,
+                              color: PColor.primaryDark,
+                            ),
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 16),
                       Text(
                         currentPatient.fullName,
                         style: const TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                           color: PColor.contentColor,
+                          letterSpacing: -0.2,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                         decoration: BoxDecoration(
-                          color: PColor.primaryColor.withOpacity(0.1),
+                          color: PColor.surfaceSubtle,
                           borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: PColor.borderSubtle),
                         ),
                         child: Text(
-                          'รหัสผู้ป่วย: ${currentPatient.patientId}',
+                          'HN: ${currentPatient.patientId} • หมู่ ${currentPatient.villageId.replaceAll('V', '')}',
                           style: const TextStyle(
-                            fontSize: 13,
-                            color: PColor.primaryDark,
+                            fontSize: 12.5,
+                            color: PColor.textSecondary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -233,99 +244,106 @@ class PatientDetailPage extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: PColor.borderSubtle),
+                    boxShadow: PShadow.card,
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text(
+                        'ข้อมูลประจำตัวผู้ป่วย',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: PColor.contentColor,
+                        ),
+                      ),
+                      const SizedBox(height: 14),
                       _buildInfoRow('เลขบัตรประชาชน', currentPatient.patientCitizenId),
-                      const Divider(height: 24),
-                      _buildInfoRow('ชื่อ - นามสกุล', currentPatient.fullName),
-                      const Divider(height: 24),
+                      const Divider(height: 20, color: PColor.borderSubtle),
                       _buildInfoRow('เพศ', currentPatient.patientGender),
-                      const Divider(height: 24),
+                      const Divider(height: 20, color: PColor.borderSubtle),
                       _buildInfoRow('อายุ', '${currentPatient.age} ปี'),
-                      const Divider(height: 24),
+                      const Divider(height: 20, color: PColor.borderSubtle),
                       _buildInfoRow(
                         'วันเกิด',
                         '${currentPatient.patientBirthDate.day.toString().padLeft(2, '0')}/${currentPatient.patientBirthDate.month.toString().padLeft(2, '0')}/${currentPatient.patientBirthDate.year + 543}',
                       ),
-                      const Divider(height: 24),
+                      const Divider(height: 20, color: PColor.borderSubtle),
                       _buildInfoRow('ที่อยู่', currentPatient.patientAddress),
                     ],
                   ),
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 24),
 
                 // Action 1: Start Screening (If VHV is logged in)
                 if (vhv != null) ...[
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ScreeningFormPage(
-                            patient: currentPatient,
-                            vhv: vhv!,
+                  SizedBox(
+                    height: 50,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ScreeningFormPage(
+                              patient: currentPatient,
+                              vhv: vhv!,
+                            ),
                           ),
+                        );
+                      },
+                      icon: const Icon(Icons.assignment_add, color: Colors.white, size: 20),
+                      label: const Text(
+                        'เริ่มคัดกรอง / ประเมินความเสี่ยง',
+                        style: TextStyle(
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
                         ),
-                      );
-                    },
-                    icon: const Icon(Icons.assignment_outlined, color: Colors.white),
-                    label: const Text(
-                      'เริ่มคัดกรอง / ประเมินความเสี่ยง',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: PColor.primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: PColor.primaryColor,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
-                      elevation: 2,
                     ),
                   ),
                   const SizedBox(height: 12),
                 ],
 
                 // Action 2: View Screening History
-                OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => PatientHistoryListPage(
-                          patient: currentPatient,
-                          nurse: nurse,
-                          vhv: vhv,
+                SizedBox(
+                  height: 50,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PatientHistoryListPage(
+                            patient: currentPatient,
+                            nurse: nurse,
+                            vhv: vhv,
+                          ),
                         ),
+                      );
+                    },
+                    icon: const Icon(Icons.history_rounded, color: PColor.primaryColor, size: 20),
+                    label: const Text(
+                      'ดูประวัติการคัดกรองสุขภาพ',
+                      style: TextStyle(
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w700,
+                        color: PColor.primaryColor,
                       ),
-                    );
-                  },
-                  icon: const Icon(Icons.history_rounded, color: PColor.primaryColor),
-                  label: const Text(
-                    'ดูประวัติการคัดกรอง',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: PColor.primaryColor,
                     ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    side: const BorderSide(color: PColor.primaryColor, width: 1.5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),
@@ -347,7 +365,7 @@ class PatientDetailPage extends StatelessWidget {
           child: Text(
             label,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 13.5,
               color: PColor.textNeutralColor,
               fontWeight: FontWeight.w500,
             ),
@@ -357,7 +375,7 @@ class PatientDetailPage extends StatelessWidget {
           child: Text(
             value,
             style: const TextStyle(
-              fontSize: 14.5,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               color: PColor.contentColor,
             ),

@@ -117,63 +117,94 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
   }
 
   Widget _buildPatientCard(BuildContext context, Patient patient) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(14),
-      elevation: 1.5,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: () {
-          context.read<PatientBloc>().add(PatientSelected(patient));
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => PatientDetailPage(
-                patient: patient,
-                nurse: widget.nurse,
-              ),
-            ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: PColor.primaryLight.withOpacity(0.15),
-                child: const Icon(Icons.person, color: PColor.primaryColor, size: 28),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      patient.fullName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.contentColor,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      'เลขบัตร: ${patient.patientCitizenId} • อายุ ${patient.age} ปี',
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        color: PColor.textNeutralColor,
-                      ),
-                    ),
-                  ],
+    final initials = patient.patientFname.isNotEmpty ? patient.patientFname.substring(0, 1) : 'P';
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: PColor.borderSubtle),
+        boxShadow: PShadow.card,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            context.read<PatientBloc>().add(PatientSelected(patient));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PatientDetailPage(
+                  patient: patient,
+                  nurse: widget.nurse,
                 ),
               ),
-              const Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: Color(0xFFBDBDBD),
-                size: 16,
-              ),
-            ],
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: PColor.primaryLight,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Center(
+                    child: Text(
+                      initials,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: PColor.primaryDark,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        patient.fullName,
+                        style: const TextStyle(
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.w700,
+                          color: PColor.contentColor,
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        'เลขบัตร: ${patient.patientCitizenId} • อายุ ${patient.age} ปี',
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          color: PColor.textSecondary,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: PColor.surfaceSubtle,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: PColor.textNeutralColor,
+                    size: 18,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

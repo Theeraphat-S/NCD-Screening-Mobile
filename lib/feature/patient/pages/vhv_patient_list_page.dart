@@ -72,19 +72,40 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            color: PColor.primaryDark,
+            decoration: const BoxDecoration(
+              color: PColor.primaryDark,
+            ),
             child: Row(
               children: [
-                const Icon(Icons.person_pin_rounded, color: Colors.white70, size: 20),
-                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.volunteer_activism_rounded, color: Colors.white, size: 18),
+                ),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    'อสม. ${widget.vhv.fullName} (หมู่ ${widget.vhv.villageId.replaceAll('V', '')})',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'อสม. ${widget.vhv.fullName}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        'พื้นที่รับผิดชอบ: หมู่ที่ ${widget.vhv.villageId.replaceAll('V', '')} รพ.สต.แม่อาย',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -111,20 +132,40 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
 
                 if (state.patients.isEmpty) {
                   return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.person_off_outlined, size: 64, color: Colors.grey.shade400),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'ไม่พบข้อมูลผู้ป่วย',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: PColor.textNeutralColor,
-                            fontWeight: FontWeight.w500,
+                    child: Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: PColor.surfaceSubtle,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: PColor.borderSubtle),
+                            ),
+                            child: const Icon(Icons.person_search_rounded, size: 40, color: PColor.textNeutralColor),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 16),
+                          const Text(
+                            'ยังไม่มีรายชื่อผู้ป่วยในหมู่บ้านนี้',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: PColor.contentColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          const Text(
+                            'กดปุ่ม "เพิ่มผู้ป่วย" ด้านล่างเพื่อเริ่มบันทึกข้อมูล',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: PColor.textNeutralColor,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }
@@ -153,14 +194,15 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: PColor.primaryColor,
-        elevation: 4,
-        icon: const Icon(Icons.person_add_alt_1_rounded, color: Colors.white),
+        elevation: 2,
+        icon: const Icon(Icons.person_add_rounded, color: Colors.white, size: 20),
         label: const Text(
-          'เพิ่มผู้ป่วย',
+          'เพิ่มผู้ป่วยใหม่',
           style: TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            fontSize: 14.5,
+            letterSpacing: -0.2,
           ),
         ),
         onPressed: () {
@@ -179,70 +221,103 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
   }
 
   Widget _buildPatientCard(BuildContext context, Patient patient) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(14),
-      elevation: 1.5,
-      shadowColor: Colors.black.withOpacity(0.04),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: () {
-          context.read<PatientBloc>().add(PatientSelected(patient));
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => PatientDetailPage(
-                patient: patient,
-                vhv: widget.vhv,
+    final initials = patient.patientFname.isNotEmpty ? patient.patientFname.substring(0, 1) : 'P';
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: PColor.borderSubtle),
+        boxShadow: PShadow.card,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            context.read<PatientBloc>().add(PatientSelected(patient));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PatientDetailPage(
+                  patient: patient,
+                  vhv: widget.vhv,
+                ),
               ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                // Initials Avatar
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: PColor.primaryLight,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Center(
+                    child: Text(
+                      initials,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: PColor.primaryDark,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                // Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        patient.fullName,
+                        style: const TextStyle(
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.w700,
+                          color: PColor.contentColor,
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(Icons.credit_card_outlined, size: 14, color: PColor.textNeutralColor),
+                          const SizedBox(width: 4),
+                          Text(
+                            patient.patientCitizenId,
+                            style: const TextStyle(
+                              fontSize: 12.5,
+                              color: PColor.textSecondary,
+                              fontFamily: 'monospace',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: PColor.surfaceSubtle,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: PColor.textNeutralColor,
+                    size: 18,
+                  ),
+                ),
+              ],
             ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              // Avatar
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: PColor.primaryLight.withOpacity(0.15),
-                child: const Icon(
-                  Icons.person,
-                  color: PColor.primaryColor,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(width: 14),
-              // Info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      patient.fullName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.contentColor,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'เลขบัตร: ${patient.patientCitizenId}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: PColor.textNeutralColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: Color(0xFFBDBDBD),
-                size: 18,
-              ),
-            ],
           ),
         ),
       ),
