@@ -11,17 +11,17 @@ android {
         local {
             dimension "app"
             applicationId "com.fldp.mobileApp.local"
-            resValue "string", "app_name", "mobile_app_standard Local"
+            resValue "string", "app_name", "NCD Screening Local"
         }
         dev {
             dimension "app"
             applicationId "com.fldp.mobileApp.dev"
-            resValue "string", "app_name", "mobile_app_standard Dev"
+            resValue "string", "app_name", "NCD Screening Dev"
         }
         prod {
             dimension "app"
             applicationId "com.fldp.mobileApp"
-            resValue "string", "app_name", "mobile_app_standard"
+            resValue "string", "app_name", "NCD Screening"
         }
     }
     namespace = "com.fldp.mobileApp_standard"
