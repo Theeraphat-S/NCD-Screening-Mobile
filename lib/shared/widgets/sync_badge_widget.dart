@@ -238,7 +238,7 @@ class SyncBadgeWidget extends StatelessWidget {
                   width: 8,
                   height: 8,
                   decoration: const BoxDecoration(
-                    color: Color(0xFF34D399), // Emerald bright
+                    color: PColor.riskLow,
                     shape: BoxShape.circle,
                   ),
                 ),

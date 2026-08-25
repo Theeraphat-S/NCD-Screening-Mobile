@@ -29,10 +29,10 @@ class AccessibilityScaleToggle extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: state.isElderlyMode ? Colors.amber.shade400 : Colors.white.withOpacity(0.2),
+              color: state.isElderlyMode ? PColor.riskModerate : Colors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: state.isElderlyMode ? Colors.amber.shade600 : Colors.white54,
+                color: state.isElderlyMode ? PColor.riskModerate : Colors.white54,
                 width: 1.2,
               ),
             ),
@@ -42,15 +42,15 @@ class AccessibilityScaleToggle extends StatelessWidget {
                 Icon(
                   Icons.text_fields_rounded,
                   size: 16,
-                  color: state.isElderlyMode ? Colors.black87 : Colors.white,
+                  color: state.isElderlyMode ? Colors.white : Colors.white,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   state.isElderlyMode ? 'โหมดตัวโต (เปิด)' : 'โหมดตัวโต',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: state.isElderlyMode ? Colors.black87 : Colors.white,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -197,87 +197,31 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Recommended Foods
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.restaurant_rounded, color: PColor.riskLow, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                fontSize: 13.5 * scale,
-                                color: PColor.contentColor,
-                                fontFamily: 'Sarabun',
-                              ),
-                              children: [
-                                const TextSpan(
-                                  text: 'อาหารที่ควรกิน: ',
-                                  style: TextStyle(fontWeight: FontWeight.bold, color: PColor.riskLow),
-                                ),
-                                TextSpan(text: advice.goodFoods.join(', ')),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                    _buildAdviceRow(
+                      icon: Icons.restaurant_rounded,
+                      iconColor: PColor.riskLow,
+                      label: 'อาหารที่ควรกิน: ',
+                      labelColor: PColor.riskLow,
+                      content: advice.goodFoods.join(', '),
+                      scale: scale,
                     ),
                     const SizedBox(height: 10),
-
-                    // Foods to avoid
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.do_not_disturb_alt_rounded, color: PColor.riskHigh, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                fontSize: 13.5 * scale,
-                                color: PColor.contentColor,
-                                fontFamily: 'Sarabun',
-                              ),
-                              children: [
-                                const TextSpan(
-                                  text: 'สิ่งที่ควรเลี่ยง: ',
-                                  style: TextStyle(fontWeight: FontWeight.bold, color: PColor.riskHigh),
-                                ),
-                                TextSpan(text: advice.avoidFoods.join(', ')),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                    _buildAdviceRow(
+                      icon: Icons.do_not_disturb_alt_rounded,
+                      iconColor: PColor.riskHigh,
+                      label: 'สิ่งที่ควรเลี่ยง: ',
+                      labelColor: PColor.riskHigh,
+                      content: advice.avoidFoods.join(', '),
+                      scale: scale,
                     ),
                     const SizedBox(height: 10),
-
-                    // Exercise Tip
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.directions_walk_rounded, color: PColor.primaryDark, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                fontSize: 13.5 * scale,
-                                color: PColor.contentColor,
-                                fontFamily: 'Sarabun',
-                              ),
-                              children: [
-                                const TextSpan(
-                                  text: 'การออกกำลังกาย: ',
-                                  style: TextStyle(fontWeight: FontWeight.bold, color: PColor.primaryDark),
-                                ),
-                                TextSpan(text: advice.exerciseTip),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                    _buildAdviceRow(
+                      icon: Icons.directions_walk_rounded,
+                      iconColor: PColor.primaryDark,
+                      label: 'การออกกำลังกาย: ',
+                      labelColor: PColor.primaryDark,
+                      content: advice.exerciseTip,
+                      scale: scale,
                     ),
                     const SizedBox(height: 10),
 
@@ -312,5 +256,40 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
             ],
           ),
         );
+  }
+
+  Widget _buildAdviceRow({
+    required IconData icon,
+    required Color iconColor,
+    required String label,
+    required Color labelColor,
+    required String content,
+    required double scale,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: iconColor, size: 18),
+        const SizedBox(width: 8),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 13.5 * scale,
+                color: PColor.contentColor,
+                fontFamily: 'Sarabun',
+              ),
+              children: [
+                TextSpan(
+                  text: label,
+                  style: TextStyle(fontWeight: FontWeight.bold, color: labelColor),
+                ),
+                TextSpan(text: content),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

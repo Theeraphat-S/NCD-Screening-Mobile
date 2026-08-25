@@ -21,8 +21,8 @@ class EmergencyHospitalCard extends StatelessWidget {
     }
 
     final isCrisis = triage.urgencyLevel == TriageUrgencyLevel.emergency;
-    final cardColor = isCrisis ? PColor.riskHigh : const Color(0xFFE11D48); // Rose 600
-    final bgColor = isCrisis ? PColor.riskHighBg : const Color(0xFFFFF1F2);
+    final cardColor = PColor.riskHigh;
+    final bgColor = PColor.riskHighBg;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 18),
