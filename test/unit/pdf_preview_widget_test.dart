@@ -168,9 +168,12 @@ void main() {
       expect(appBarPdfIcon, findsWidgets);
 
       // Verify Body Button
-      expect(find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)'), findsOneWidget);
+      final exportBtn = find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)');
+      expect(exportBtn, findsOneWidget);
+      await tester.ensureVisible(exportBtn);
+      await tester.pump(const Duration(milliseconds: 100));
 
-      await tester.tap(find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)'));
+      await tester.tap(exportBtn);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
@@ -193,9 +196,12 @@ void main() {
         ),
       );
 
-      expect(find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)'), findsOneWidget);
+      final exportBtn = find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)');
+      expect(exportBtn, findsOneWidget);
+      await tester.ensureVisible(exportBtn);
+      await tester.pump(const Duration(milliseconds: 100));
 
-      await tester.tap(find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)'));
+      await tester.tap(exportBtn);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 

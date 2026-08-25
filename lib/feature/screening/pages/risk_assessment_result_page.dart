@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app_standard/domain/models/ncd_models.dart';
+import 'package:mobile_app_standard/domain/services/clinical_triage_service.dart';
+import 'package:mobile_app_standard/domain/services/ncd_lifestyle_advisor.dart';
 import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
 import 'package:mobile_app_standard/feature/patient/pages/vhv_patient_list_page.dart';
 import 'package:mobile_app_standard/feature/screening/pages/pdf_preview_page.dart';
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:mobile_app_standard/shared/widgets/elderly_bento_advice_card.dart';
+import 'package:mobile_app_standard/shared/widgets/emergency_hospital_card.dart';
 
 class RiskAssessmentResultPage extends StatelessWidget {
   final Patient patient;
@@ -39,6 +43,10 @@ class RiskAssessmentResultPage extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+            child: AccessibilityScaleToggle(),
+          ),
           IconButton(
             icon: const Icon(Icons.picture_as_pdf_outlined, color: Colors.white),
             tooltip: 'ส่งออก/พิมพ์รายงาน PDF',
@@ -63,6 +71,14 @@ class RiskAssessmentResultPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Emergency Hospital Card if Triage Alert
+              EmergencyHospitalCard(
+                triage: ClinicalTriageService.assess(
+                  screening: screening,
+                  results: screening.results,
+                ),
+              ),
+
               // Step Indicator
               _buildStepIndicator(),
               const SizedBox(height: 16),
@@ -143,6 +159,39 @@ class RiskAssessmentResultPage extends StatelessWidget {
 
               // 4 Disease Risk Cards
               ...screening.results.map(_buildDiseaseCard),
+
+              const SizedBox(height: 18),
+
+              // Plain Thai Lifestyle Guidance Header (Elderly Friendly)
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: PColor.primaryLight,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(Icons.tips_and_updates_rounded, color: PColor.primaryDark, size: 18),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'คำแนะนำสุขภาพและการปฏิบัติตัวเฉพาะบุคคล',
+                    style: TextStyle(
+                      fontSize: 15.5,
+                      fontWeight: FontWeight.w700,
+                      color: PColor.contentColor,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              // Plain Thai Bento Cards
+              ...NcdLifestyleAdvisor.generateAdviceList(
+                screening: screening,
+                results: screening.results,
+              ).map((adv) => ElderlyBentoAdviceCard(advice: adv)),
 
               const SizedBox(height: 12),
 

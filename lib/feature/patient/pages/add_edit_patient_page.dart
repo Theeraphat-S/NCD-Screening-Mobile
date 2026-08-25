@@ -8,12 +8,20 @@ class AddEditPatientPage extends StatefulWidget {
   final VHV? vhv;
   final Patient? patient;
   final String villageId;
+  final String? initialCitizenId;
+  final String? initialTitle;
+  final String? initialFname;
+  final String? initialLname;
 
   const AddEditPatientPage({
     super.key,
     this.vhv,
     this.patient,
     required this.villageId,
+    this.initialCitizenId,
+    this.initialTitle,
+    this.initialFname,
+    this.initialLname,
   });
 
   @override
@@ -37,10 +45,18 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
   void initState() {
     super.initState();
     final p = widget.patient;
-    _citizenIdController = TextEditingController(text: p?.patientCitizenId ?? '');
-    _titleController = TextEditingController(text: p?.patientTitle ?? 'นาย');
-    _fnameController = TextEditingController(text: p?.patientFname ?? '');
-    _lnameController = TextEditingController(text: p?.patientLname ?? '');
+    _citizenIdController = TextEditingController(
+      text: p?.patientCitizenId ?? widget.initialCitizenId ?? '',
+    );
+    _titleController = TextEditingController(
+      text: p?.patientTitle ?? widget.initialTitle ?? 'นาย',
+    );
+    _fnameController = TextEditingController(
+      text: p?.patientFname ?? widget.initialFname ?? '',
+    );
+    _lnameController = TextEditingController(
+      text: p?.patientLname ?? widget.initialLname ?? '',
+    );
     _addressController = TextEditingController(text: p?.patientAddress ?? '');
     _mobileController = TextEditingController(text: p?.patientMobile ?? '');
     if (p != null) {

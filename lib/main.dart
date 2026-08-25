@@ -12,8 +12,10 @@ import 'package:mobile_app_standard/feature/todo/bloc/todo_bloc.dart';
 import 'package:mobile_app_standard/feature/vhv/bloc/vhv_bloc.dart';
 import 'package:mobile_app_standard/i18n/i18n.dart';
 import 'package:mobile_app_standard/locator.dart';
+import 'package:mobile_app_standard/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:mobile_app_standard/shared/bloc/language/language_bloc.dart';
 import 'package:mobile_app_standard/shared/bloc/language/language_state.dart';
+import 'package:mobile_app_standard/shared/bloc/sync_badge_bloc.dart';
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
 
 Future<void> main() async {
@@ -30,6 +32,10 @@ Future<void> main() async {
         BlocProvider<VhvBloc>(create: (context) => locator<VhvBloc>()),
         BlocProvider<VillageBloc>(create: (context) => locator<VillageBloc>()),
         BlocProvider<VillageAnalyticsBloc>(create: (context) => locator<VillageAnalyticsBloc>()),
+        BlocProvider<SyncBadgeBloc>(
+          create: (context) => locator<SyncBadgeBloc>()..add(const SyncBadgeStarted()),
+        ),
+        BlocProvider<AccessibilityCubit>(create: (context) => locator<AccessibilityCubit>()),
         BlocProvider<TodoBloc>(create: (context) => locator<TodoBloc>()),
         BlocProvider<WebsocketBloc>(create: (context) => locator<WebsocketBloc>()),
         BlocProvider<LanguageBloc>(create: (context) => locator<LanguageBloc>()),

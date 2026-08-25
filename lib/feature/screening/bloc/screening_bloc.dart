@@ -1,8 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app_standard/domain/models/ncd_models.dart';
+import 'package:mobile_app_standard/domain/models/sync_queue_item.dart';
 import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
 import 'package:mobile_app_standard/domain/services/ncd_risk_calculator.dart';
+import 'package:mobile_app_standard/domain/services/sync_queue_service.dart';
+import 'package:mobile_app_standard/locator.dart';
 
 // EVENTS
 abstract class ScreeningEvent extends Equatable {
@@ -198,6 +201,34 @@ class ScreeningBloc extends Bloc<ScreeningEvent, ScreeningState> {
       emit(state.copyWith(status: ScreeningStatus.loading));
       try {
         final saved = await repository.saveScreening(event.screening);
+        
+        // Enqueue to offline sync queue if service is available
+        if (locator.isRegistered<SyncQueueServiceInterface>()) {
+          locator<SyncQueueServiceInterface>().enqueue(
+            SyncQueueItem(
+              id: 'SYNC_${saved.screenId}_${DateTime.now().millisecondsSinceEpoch}',
+              entityType: 'screening',
+              entityId: saved.screenId,
+              action: 'create',
+              payload: {
+                'screenId': saved.screenId,
+                'patientId': saved.patientId,
+                'vhvId': saved.vhvId,
+                'screeningDate': saved.screeningDate.toIso8601String(),
+                'weight': saved.weight,
+                'height': saved.height,
+                'bmi': saved.bmi,
+                'waistCm': saved.waistCm,
+                'sbp': saved.sbp,
+                'dbp': saved.dbp,
+                'pulse': saved.pulse,
+                'bloodSugar': saved.bloodSugar,
+              },
+              createdAt: DateTime.now(),
+            ),
+          );
+        }
+
         emit(state.copyWith(
           status: ScreeningStatus.success,
           currentScreening: saved,

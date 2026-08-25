@@ -8,8 +8,14 @@ import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
 import 'package:mobile_app_standard/feature/nurse/pages/nurse_add_edit_vhv_page.dart';
 import 'package:mobile_app_standard/feature/nurse/pages/nurse_patient_list_page.dart';
 import 'package:mobile_app_standard/feature/nurse/pages/nurse_vhv_list_page.dart';
+import 'package:mobile_app_standard/feature/nurse/pages/nurse_vhv_detail_page.dart';
 import 'package:mobile_app_standard/feature/patient/pages/patient_detail_page.dart';
+import 'package:flutter/services.dart';
+import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
+import 'package:mobile_app_standard/domain/services/health_data_export_service.dart';
+import 'package:mobile_app_standard/locator.dart';
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:mobile_app_standard/shared/widgets/sync_badge_widget.dart';
 
 class NurseVillageListPage extends StatefulWidget {
   final Nurse nurse;
@@ -40,6 +46,142 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
     super.dispose();
   }
 
+  void _showExportDataDialog(BuildContext context) {
+    ExportPrivacyMode selectedMode = ExportPrivacyMode.anonymized;
+    final passwordController = TextEditingController();
+    String? errorMessage;
+
+    showDialog(
+      context: context,
+      builder: (dialogCtx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Row(
+            children: [
+              Icon(Icons.file_download_rounded, color: PColor.primaryColor),
+              SizedBox(width: 8),
+              Text(
+                'ส่งออกข้อมูลสุขภาพ (Excel/CSV)',
+                style: TextStyle(fontSize: 16.5, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'เลือกรูปแบบความเป็นส่วนตัวตามมาตรฐานสาธารณสุข:',
+                  style: TextStyle(fontSize: 13.5, color: PColor.textSecondary),
+                ),
+                const SizedBox(height: 12),
+                RadioListTile<ExportPrivacyMode>(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('โหมดนิรนาม สถิติวิจัย (PDPA)', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  subtitle: const Text('ซ่อนเลขบัตร ปชช. (1-5002-XXXXX-XX-0) และย่อชื่อผู้ป่วย', style: TextStyle(fontSize: 12)),
+                  value: ExportPrivacyMode.anonymized,
+                  groupValue: selectedMode,
+                  activeColor: PColor.primaryColor,
+                  onChanged: (val) {
+                    if (val != null) {
+                      setDialogState(() {
+                        selectedMode = val;
+                        errorMessage = null;
+                      });
+                    }
+                  },
+                ),
+                RadioListTile<ExportPrivacyMode>(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('โหมดเวชระเบียนเต็ม (Full HIS)', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  subtitle: const Text('แสดงเลขและชื่อเต็มเพื่อนำเข้า JHCIS/HOSxP (ต้องใส่รหัสพยาบาล)', style: TextStyle(fontSize: 12)),
+                  value: ExportPrivacyMode.clinicalFull,
+                  groupValue: selectedMode,
+                  activeColor: PColor.primaryColor,
+                  onChanged: (val) {
+                    if (val != null) {
+                      setDialogState(() {
+                        selectedMode = val;
+                        errorMessage = null;
+                      });
+                    }
+                  },
+                ),
+                if (selectedMode == ExportPrivacyMode.clinicalFull) ...[
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: 'กรอกรหัสผ่านพยาบาลเพื่อยืนยันสิทธิ์',
+                      hintStyle: const TextStyle(fontSize: 13),
+                      prefixIcon: const Icon(Icons.lock_outline_rounded, size: 18),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    ),
+                  ),
+                ],
+                if (errorMessage != null) ...[
+                  const SizedBox(height: 8),
+                  Text(errorMessage!, style: const TextStyle(color: PColor.riskHigh, fontSize: 12)),
+                ],
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogCtx),
+              child: const Text('ยกเลิก'),
+            ),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: PColor.primaryColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              icon: const Icon(Icons.copy_rounded, color: Colors.white, size: 16),
+              label: const Text('ส่งออกและคัดลอก CSV', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                if (selectedMode == ExportPrivacyMode.clinicalFull) {
+                  if (passwordController.text.trim() != widget.nurse.nursePassword) {
+                    setDialogState(() => errorMessage = 'รหัสผ่านพยาบาลไม่ถูกต้อง');
+                    return;
+                  }
+                }
+
+                final repo = locator<NcdRepositoryInterface>();
+                final patients = await repo.getPatients();
+                final screenings = await repo.getAllScreenings();
+                final villages = await repo.getVillages();
+
+                final csvData = HealthDataExportService.generateCsv(
+                  patients: patients,
+                  screenings: screenings,
+                  villages: villages,
+                  mode: selectedMode,
+                );
+
+                await Clipboard.setData(ClipboardData(text: csvData));
+
+                if (!mounted) return;
+                Navigator.pop(dialogCtx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'ส่งออกข้อมูล ${screenings.length} รายการเรียบร้อยแล้ว (คัดลอกลง Clipboard แล้ว)',
+                    ),
+                    backgroundColor: PColor.riskLow,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +210,12 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
         ),
         centerTitle: true,
         actions: [
+          const SyncBadgeWidget(),
+          IconButton(
+            icon: const Icon(Icons.file_download_outlined, color: Colors.white),
+            tooltip: 'ส่งออกข้อมูลสุขภาพ (Excel/CSV)',
+            onPressed: () => _showExportDataDialog(context),
+          ),
           IconButton(
             icon:
                 const Icon(Icons.person_add_alt_1_rounded, color: Colors.white),

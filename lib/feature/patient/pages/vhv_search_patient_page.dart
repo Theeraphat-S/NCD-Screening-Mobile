@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app_standard/domain/models/ncd_models.dart';
 import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
+import 'package:mobile_app_standard/feature/patient/pages/id_card_scanner_page.dart';
 import 'package:mobile_app_standard/feature/patient/pages/patient_detail_page.dart';
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
 
@@ -115,26 +116,63 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Search Button
-              ElevatedButton.icon(
-                onPressed: _onSearch,
-                icon: const Icon(Icons.search_rounded, color: Colors.white, size: 20),
-                label: const Text(
-                  'ค้นหา',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+              // Actions Row (Search + OCR Scan)
+              Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: ElevatedButton.icon(
+                      onPressed: _onSearch,
+                      icon: const Icon(Icons.search_rounded, color: Colors.white, size: 20),
+                      label: const Text(
+                        'ค้นหา',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: PColor.primaryColor,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 2,
+                      ),
+                    ),
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: PColor.primaryColor,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    flex: 2,
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => IdCardScannerPage(vhv: widget.vhv),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.document_scanner_rounded, color: PColor.primaryColor, size: 19),
+                      label: const Text(
+                        'สแกน OCR',
+                        style: TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w700,
+                          color: PColor.primaryColor,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
                   ),
-                  elevation: 2,
-                ),
+                ],
               ),
               const SizedBox(height: 24),
 

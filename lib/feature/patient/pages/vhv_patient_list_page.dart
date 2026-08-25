@@ -4,9 +4,11 @@ import 'package:mobile_app_standard/domain/models/ncd_models.dart';
 import 'package:mobile_app_standard/feature/auth/pages/user_type_selection_page.dart';
 import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
 import 'package:mobile_app_standard/feature/patient/pages/add_edit_patient_page.dart';
+import 'package:mobile_app_standard/feature/patient/pages/id_card_scanner_page.dart';
 import 'package:mobile_app_standard/feature/patient/pages/patient_detail_page.dart';
 import 'package:mobile_app_standard/feature/patient/pages/vhv_search_patient_page.dart';
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:mobile_app_standard/shared/widgets/sync_badge_widget.dart';
 
 class VhvPatientListPage extends StatefulWidget {
   final VHV vhv;
@@ -53,6 +55,19 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
         ),
         centerTitle: true,
         actions: [
+          const SyncBadgeWidget(),
+          IconButton(
+            tooltip: 'สแกนบัตร ปชช.',
+            icon: const Icon(Icons.document_scanner_rounded, color: Colors.white, size: 24),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => IdCardScannerPage(vhv: widget.vhv),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.search_rounded, color: Colors.white, size: 26),
             onPressed: () {
