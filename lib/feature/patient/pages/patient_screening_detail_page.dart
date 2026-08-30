@@ -9,6 +9,7 @@ import 'package:mobile_app_standard/feature/screening/pages/pdf_preview_page.dar
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
 import 'package:mobile_app_standard/shared/widgets/elderly_bento_advice_card.dart';
 import 'package:mobile_app_standard/shared/widgets/emergency_hospital_card.dart';
+import 'package:mobile_app_standard/shared/widgets/patient_accessibility_floating_bubble.dart';
 
 class PatientScreeningDetailPage extends StatelessWidget {
   final Patient patient;
@@ -79,355 +80,323 @@ class PatientScreeningDetailPage extends StatelessWidget {
               ),
             ],
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(18.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Emergency Hospital Card if Triage Alert
-                EmergencyHospitalCard(
-                  triage: ClinicalTriageService.assess(
-                    screening: currentScreening,
-                    results: currentScreening.results,
-                  ),
-                ),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                padding: const EdgeInsets.all(18.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Emergency Hospital Card if Triage Alert
+                    EmergencyHospitalCard(
+                      triage: ClinicalTriageService.assess(
+                        screening: currentScreening,
+                        results: currentScreening.results,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
 
-                // Top Meta Date & Status Banner
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'วันที่คัดกรอง: $dateStr',
-                        style: const TextStyle(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w600,
-                          color: PColor.contentColor,
+                    // Status Banner
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: isPending ? PColor.statusPendingBg : PColor.statusApprovedBg,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isPending ? PColor.statusPending : PColor.statusApproved,
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      child: Row(
+                        children: [
+                          Icon(
+                            isPending ? Icons.hourglass_top_rounded : Icons.check_circle_rounded,
+                            color: isPending ? PColor.statusPending : PColor.statusApproved,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  isPending ? 'รอพยาบาลตรวจสอบและรับรองผล' : 'ผ่านการรับรองโดยพยาบาลแล้ว',
+                                  style: TextStyle(
+                                    fontSize: 14.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: isPending ? PColor.statusPending : PColor.statusApproved,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  'วันที่ตรวจ: $dateStr',
+                                  style: const TextStyle(
+                                    fontSize: 12.5,
+                                    color: PColor.textNeutralColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // 4 NCDs Risk Summary Cards
+                    const Text(
+                      'ผลการประเมินความเสี่ยง 4 โรค',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: PColor.contentColor,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ...currentScreening.results.map(
+                      (res) => Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: isPending ? Colors.orange.shade50 : Colors.green.shade50,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: isPending ? Colors.orange : Colors.green,
-                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: PColor.borderSubtle),
                         ),
-                        child: Text(
-                          'สถานะ: ${currentScreening.reviewStatus.labelTh}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: isPending ? Colors.orange.shade800 : Colors.green.shade800,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 14),
-
-                // Patient Info Card
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
-                        child: const Icon(Icons.person, size: 36, color: PColor.primaryColor),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
                           children: [
-                            Text(
-                              patient.fullName,
-                              style: const TextStyle(
-                                fontSize: 16.5,
-                                fontWeight: FontWeight.bold,
-                                color: PColor.contentColor,
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: _getRiskColor(res.riskLevel).withValues(alpha: 0.12),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.favorite_rounded,
+                                color: _getRiskColor(res.riskLevel),
+                                size: 22,
                               ),
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              'เลขบัตร: ${patient.patientCitizenId}',
-                              style: const TextStyle(fontSize: 12.5, color: PColor.textNeutralColor),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    res.diseaseName,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: PColor.contentColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'คะแนน: ${res.score} คะแนน',
+                                    style: const TextStyle(
+                                      fontSize: 12.5,
+                                      color: PColor.textNeutralColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Text(
-                              'เพศ: ${patient.patientGender} • อายุ: ${currentScreening.ageAtScreening} ปี',
-                              style: const TextStyle(fontSize: 12.5, color: PColor.textNeutralColor),
-                            ),
-                            Text(
-                              'ที่อยู่: ${patient.patientAddress}',
-                              style: const TextStyle(fontSize: 12, color: PColor.textNeutralColor),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: _getRiskColor(res.riskLevel),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                res.riskLevel.labelTh,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.5,
+                                ),
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 14),
+                    ),
 
-                // Evaluation Results (4 Diseases)
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'ผลการประเมิน (4 โรค)',
-                        style: TextStyle(
-                          fontSize: 15.5,
-                          fontWeight: FontWeight.bold,
-                          color: PColor.primaryDark,
+                    const SizedBox(height: 12),
+
+                    // Plain Thai Lifestyle Guidance Header (Elderly Friendly)
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            PColor.primaryDark,
+                            PColor.primaryColor,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
+                        borderRadius: BorderRadius.circular(14),
                       ),
-                      const Divider(height: 18),
-                      ...currentScreening.results.map((res) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                res.diseaseName,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: PColor.contentColor,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: _getRiskColor(res.riskLevel).withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  res.riskLevel.labelTh,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.health_and_safety_rounded,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'คู่มือการปฏิบัติตัวและอาหารสุขภาพ',
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    color: _getRiskColor(res.riskLevel),
+                                    fontSize: 15,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 14),
-
-                // Section 1: Physical Check
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'ตอนที่ 1: ตรวจร่างกาย',
-                        style: TextStyle(
-                          fontSize: 15.5,
-                          fontWeight: FontWeight.bold,
-                          color: PColor.primaryDark,
-                        ),
-                      ),
-                      const Divider(height: 18),
-                      _buildMetricRow('น้ำหนัก', '${currentScreening.weight.toStringAsFixed(0)} kg'),
-                      _buildMetricRow('ส่วนสูง', '${currentScreening.height.toStringAsFixed(0)} cm'),
-                      _buildMetricRow('BMI', '${currentScreening.bmi.toStringAsFixed(1)} kg/m²'),
-                      _buildMetricRow('รอบเอว', '${currentScreening.waistCm.toStringAsFixed(0)} cm'),
-                      _buildMetricRow('ความดันตัวบน (Systolic)', '${currentScreening.sbp.toStringAsFixed(0)} mmHg'),
-                      _buildMetricRow('ความดันตัวล่าง (Diastolic)', '${currentScreening.dbp.toStringAsFixed(0)} mmHg'),
-                      _buildMetricRow('ชีพจรขณะพัก', '${currentScreening.pulse.toStringAsFixed(0)} ครั้ง/นาที'),
-                      _buildMetricRow('ระดับน้ำตาลในเลือด', '${currentScreening.bloodSugar.toStringAsFixed(0)} mg/dL'),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 14),
-
-                // Section 2: Medical History
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'ตอนที่ 2: ประวัติบุคคล/ครอบครัว',
-                        style: TextStyle(
-                          fontSize: 15.5,
-                          fontWeight: FontWeight.bold,
-                          color: PColor.primaryDark,
-                        ),
-                      ),
-                      const Divider(height: 18),
-                      ...currentScreening.histories.map((h) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                h.questionText,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: PColor.contentColor,
+                                SizedBox(height: 2),
+                                Text(
+                                  'คำแนะนำเข้าใจง่ายสำหรับประชาชนและผู้สูงอายุ',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 12,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'คำตอบ: ${h.answerText}',
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: PColor.primaryDark,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 18),
-
-                // Plain Thai Lifestyle Guidance Header (Elderly Friendly)
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: PColor.primaryLight,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(Icons.tips_and_updates_rounded, color: PColor.primaryDark, size: 18),
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'คำแนะนำสุขภาพและการปฏิบัติตัวเฉพาะบุคคล',
-                      style: TextStyle(
-                        fontSize: 15.5,
-                        fontWeight: FontWeight.w700,
-                        color: PColor.contentColor,
-                        letterSpacing: -0.2,
+                        ],
                       ),
                     ),
+                    const SizedBox(height: 12),
+
+                    // Personalized Plain Thai Lifestyle Guidance Bento Cards
+                    ...NcdLifestyleAdvisor.generateAdviceList(
+                      screening: currentScreening,
+                      results: currentScreening.results,
+                    ).map((adv) => ElderlyBentoAdviceCard(advice: adv)),
+
+                    const SizedBox(height: 14),
+
+                    // Vitals Information Card
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'ข้อมูลสัญญาณชีพและร่างกาย',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: PColor.contentColor,
+                              ),
+                            ),
+                            const Divider(height: 20),
+                            _buildMetricRow('น้ำหนัก', '${currentScreening.weight.toStringAsFixed(1)} กก.'),
+                            _buildMetricRow('ส่วนสูง', '${currentScreening.height.toStringAsFixed(1)} ซม.'),
+                            _buildMetricRow('BMI', '${currentScreening.bmi.toStringAsFixed(1)} kg/m²'),
+                            _buildMetricRow('รอบเอว', '${currentScreening.waistCm.toStringAsFixed(1)} ซม.'),
+                            _buildMetricRow(
+                              'ความดันโลหิต',
+                              '${currentScreening.sbp.toInt()}/${currentScreening.dbp.toInt()} mmHg',
+                            ),
+                            _buildMetricRow('ชีพจร', '${currentScreening.pulse.toInt()} ครั้ง/นาที'),
+                            _buildMetricRow(
+                              'น้ำตาลในเลือด',
+                              '${currentScreening.bloodSugar.toStringAsFixed(1)} mg/dL',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    // Export PDF Button
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => PdfPreviewPage(
+                              patient: patient,
+                              screening: currentScreening,
+                              vhv: vhv,
+                              nurse: nurse,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.picture_as_pdf_outlined, color: PColor.primaryColor),
+                      label: const Text(
+                        'ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)',
+                        style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.bold,
+                          color: PColor.primaryColor,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Nurse Action Button
+                    if (nurse != null) ...[
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => NurseApproveRiskPage(
+                                nurse: nurse!,
+                                patient: patient,
+                                screening: currentScreening,
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: PColor.primaryColor,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 2,
+                        ),
+                        child: const Text(
+                          'ประเมินและยืนยันผล (Submit)',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                   ],
                 ),
-                const SizedBox(height: 10),
-
-                // Plain Thai Bento Cards
-                ...NcdLifestyleAdvisor.generateAdviceList(
-                  screening: currentScreening,
-                  results: currentScreening.results,
-                ).map((adv) => ElderlyBentoAdviceCard(advice: adv)),
-
-                const SizedBox(height: 14),
-
-                // PDF Export Action Button
-                OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => PdfPreviewPage(
-                          patient: patient,
-                          screening: currentScreening,
-                          vhv: vhv,
-                          nurse: nurse,
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.picture_as_pdf_outlined, color: PColor.primaryColor),
-                  label: const Text(
-                    'ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: PColor.primaryColor,
-                    ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    side: const BorderSide(color: PColor.primaryColor, width: 1.5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    backgroundColor: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 14),
-
-                // Nurse Action Button
-                if (nurse != null) ...[
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => NurseApproveRiskPage(
-                            nurse: nurse!,
-                            patient: patient,
-                            screening: currentScreening,
-                          ),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: PColor.primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 2,
-                    ),
-                    child: const Text(
-                      'ประเมินและยืนยันผล (Submit)',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ],
-            ),
+              ),
+              const PatientAccessibilityFloatingBubble(),
+            ],
           ),
         );
       },

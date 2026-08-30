@@ -21,6 +21,15 @@ class PColor {
   static const Color borderStrong = Color(0xFFCBD5E1); // Slate 300
   static const Color errorColor = Color(0xFFDC2626); // Red 600
 
+  // High Contrast (WCAG AAA) Accessibility Tokens
+  static const Color hcBackground = Color(0xFF121212); // Dark Charcoal
+  static const Color hcSurface = Color(0xFF1E1E1E); // Elevated Dark Card
+  static const Color hcSurfaceElevated = Color(0xFF2C2C2C); // Active/Hover Surface
+  static const Color hcAccent = Color(0xFFFFD600); // Vivid Yellow Accent
+  static const Color hcCyan = Color(0xFF00E5FF); // Vivid Cyan Accent
+  static const Color hcText = Color(0xFFFFFFFF); // Pure White Text
+  static const Color hcTextMuted = Color(0xFFB0B0B0); // High Contrast Muted Text
+
   // Calibrated Clinical Risk Tokens (WCAG AA Compliant)
   static const Color riskLow = Color(0xFF059669); // Emerald 600
   static const Color riskLowBg = Color(0xFFECFDF5); // Emerald 50

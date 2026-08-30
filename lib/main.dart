@@ -15,7 +15,7 @@ import 'package:mobile_app_standard/shared/bloc/accessibility/accessibility_cubi
 import 'package:mobile_app_standard/shared/bloc/language/language_bloc.dart';
 import 'package:mobile_app_standard/shared/bloc/language/language_state.dart';
 import 'package:mobile_app_standard/shared/bloc/sync_badge_bloc.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:mobile_app_standard/shared/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,83 +50,30 @@ class NcdScreeningApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LanguageBloc, LanguageState>(
       builder: (context, languageState) {
-        return MaterialApp(
-          title: 'NCD Screening Mobile',
-          debugShowCheckedModeBanner: false,
-          supportedLocales: I18n.all,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          locale: languageState.locale,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: PColor.primaryColor,
-              primary: PColor.primaryColor,
-              secondary: PColor.secondaryColor,
-              surface: PColor.neutralColor,
-              error: PColor.errorColor,
-            ),
-            scaffoldBackgroundColor: PColor.backgroundColor,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: PColor.primaryColor,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              centerTitle: true,
-              titleTextStyle: TextStyle(
-                fontFamily: 'Sarabun',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            cardTheme: CardThemeData(
-              color: Colors.white,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: const BorderSide(color: PColor.borderSubtle, width: 1),
-              ),
-              margin: EdgeInsets.zero,
-            ),
-            inputDecorationTheme: InputDecorationTheme(
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: PColor.borderSubtle),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: PColor.borderSubtle),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: PColor.primaryColor, width: 1.5),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: PColor.errorColor),
-              ),
-            ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: PColor.primaryColor,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                textStyle: const TextStyle(
-                  fontFamily: 'Sarabun',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            useMaterial3: true,
-            fontFamily: 'Sarabun',
-          ),
-          home: const UserTypeSelectionPage(),
+        return BlocBuilder<AccessibilityCubit, AccessibilityState>(
+          builder: (context, accessState) {
+            return MaterialApp(
+              title: 'NCD Screening Mobile',
+              debugShowCheckedModeBanner: false,
+              supportedLocales: I18n.all,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              locale: languageState.locale,
+              theme: accessState.isHighContrast
+                  ? AppTheme.highContrastTheme
+                  : AppTheme.standardTheme,
+              builder: (context, child) {
+                final mediaQuery = MediaQuery.of(context);
+                final systemScale = mediaQuery.textScaler.scale(1.0);
+                return MediaQuery(
+                  data: mediaQuery.copyWith(
+                    textScaler: TextScaler.linear(systemScale * accessState.textScaleFactor),
+                  ),
+                  child: child ?? const SizedBox.shrink(),
+                );
+              },
+              home: const UserTypeSelectionPage(),
+            );
+          },
         );
       },
     );

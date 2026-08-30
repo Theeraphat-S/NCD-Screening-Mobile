@@ -10,6 +10,7 @@ import 'package:mobile_app_standard/feature/patient/pages/patient_screening_deta
 import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
 import 'package:mobile_app_standard/feature/screening/pages/pdf_preview_page.dart';
 import 'package:mobile_app_standard/feature/screening/pages/risk_assessment_result_page.dart';
+import 'package:mobile_app_standard/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
@@ -150,10 +151,14 @@ void main() {
 
       final mockRepo = MockNcdRepository();
       final screeningBloc = ScreeningBloc(mockRepo);
+      final accessibilityCubit = AccessibilityCubit();
 
       await tester.pumpWidget(
-        BlocProvider<ScreeningBloc>.value(
-          value: screeningBloc,
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<ScreeningBloc>.value(value: screeningBloc),
+            BlocProvider<AccessibilityCubit>.value(value: accessibilityCubit),
+          ],
           child: MaterialApp(
             home: PatientScreeningDetailPage(
               patient: samplePatient,
@@ -168,7 +173,7 @@ void main() {
       expect(appBarPdfIcon, findsWidgets);
 
       // Verify Body Button
-      final exportBtn = find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)');
+      final exportBtn = find.text('ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)');
       expect(exportBtn, findsOneWidget);
       await tester.ensureVisible(exportBtn);
       await tester.pump(const Duration(milliseconds: 100));
@@ -180,6 +185,7 @@ void main() {
       expect(find.byType(PdfPreviewPage), findsOneWidget);
 
       screeningBloc.close();
+      accessibilityCubit.close();
     });
 
     testWidgets('RiskAssessmentResultPage has PDF export button navigating to PdfPreviewPage', (WidgetTester tester) async {
@@ -187,11 +193,16 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
+      final accessibilityCubit = AccessibilityCubit();
+
       await tester.pumpWidget(
-        MaterialApp(
-          home: RiskAssessmentResultPage(
-            patient: samplePatient,
-            screening: sampleScreening,
+        BlocProvider<AccessibilityCubit>.value(
+          value: accessibilityCubit,
+          child: MaterialApp(
+            home: RiskAssessmentResultPage(
+              patient: samplePatient,
+              screening: sampleScreening,
+            ),
           ),
         ),
       );
@@ -206,6 +217,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
 
       expect(find.byType(PdfPreviewPage), findsOneWidget);
+
+      accessibilityCubit.close();
     });
   });
 }

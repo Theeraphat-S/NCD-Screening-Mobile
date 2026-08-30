@@ -6,6 +6,8 @@ import 'package:mobile_app_standard/feature/patient/pages/patient_screening_deta
 import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
 
+import 'package:mobile_app_standard/shared/widgets/patient_accessibility_floating_bubble.dart';
+
 class PatientHistoryListPage extends StatefulWidget {
   final Patient patient;
   final Nurse? nurse;
@@ -64,8 +66,10 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
         ),
         centerTitle: true,
       ),
-      body: Column(
+      body: Stack(
         children: [
+          Column(
+            children: [
           // Header Patient Info Card
           Container(
             width: double.infinity,
@@ -152,8 +156,11 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
           ),
         ],
       ),
-    );
-  }
+      if (isPatientSelf) const PatientAccessibilityFloatingBubble(),
+    ],
+  ),
+);
+}
 
   Widget _buildHistoryCard(BuildContext context, Screening item) {
     final dateStr =

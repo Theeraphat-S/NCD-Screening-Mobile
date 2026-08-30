@@ -10,6 +10,8 @@ import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
 import 'package:mobile_app_standard/shared/widgets/elderly_bento_advice_card.dart';
 import 'package:mobile_app_standard/shared/widgets/emergency_hospital_card.dart';
 
+import 'package:mobile_app_standard/shared/widgets/patient_accessibility_floating_bubble.dart';
+
 class RiskAssessmentResultPage extends StatelessWidget {
   final Patient patient;
   final Screening screening;
@@ -65,12 +67,14 @@ class RiskAssessmentResultPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
               // Emergency Hospital Card if Triage Alert
               EmergencyHospitalCard(
                 triage: ClinicalTriageService.assess(
@@ -273,8 +277,11 @@ class RiskAssessmentResultPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+      const PatientAccessibilityFloatingBubble(),
+    ],
+  ),
+);
+}
 
   Widget _buildStepIndicator() {
     return Container(

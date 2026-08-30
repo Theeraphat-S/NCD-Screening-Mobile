@@ -29,24 +29,51 @@ class AccessibilityState extends Equatable {
 }
 
 class AccessibilityCubit extends Cubit<AccessibilityState> {
+  static const double defaultTextScale = 1.0;
+  static const double elderlyTextScale = 1.35;
+  static const double minTextScale = 0.85;
+  static const double maxTextScale = 1.60;
+  static const double scaleStep = 0.10;
+
   AccessibilityCubit() : super(const AccessibilityState());
 
   void toggleElderlyMode() {
     final next = !state.isElderlyMode;
     emit(state.copyWith(
       isElderlyMode: next,
-      textScaleFactor: next ? 1.35 : 1.0,
+      textScaleFactor: next ? elderlyTextScale : defaultTextScale,
     ));
   }
 
   void setElderlyMode(bool enabled) {
     emit(state.copyWith(
       isElderlyMode: enabled,
-      textScaleFactor: enabled ? 1.35 : 1.0,
+      textScaleFactor: enabled ? elderlyTextScale : defaultTextScale,
     ));
   }
 
   void toggleHighContrast() {
     emit(state.copyWith(isHighContrast: !state.isHighContrast));
+  }
+
+  void increaseTextScale() {
+    _adjustTextScale(scaleStep);
+  }
+
+  void decreaseTextScale() {
+    _adjustTextScale(-scaleStep);
+  }
+
+  void _adjustTextScale(double delta) {
+    final newScale = (state.textScaleFactor + delta).clamp(minTextScale, maxTextScale);
+    final rounded = double.parse(newScale.toStringAsFixed(2));
+    emit(state.copyWith(
+      textScaleFactor: rounded,
+      isElderlyMode: rounded == elderlyTextScale,
+    ));
+  }
+
+  void resetAccessibility() {
+    emit(const AccessibilityState());
   }
 }

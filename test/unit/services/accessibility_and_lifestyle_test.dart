@@ -36,6 +36,38 @@ void main() {
       expect(cubit.state.isElderlyMode, isTrue);
       expect(cubit.state.textScaleFactor, 1.35);
     });
+
+    test('toggleHighContrast toggles contrast mode', () {
+      expect(cubit.state.isHighContrast, isFalse);
+      cubit.toggleHighContrast();
+      expect(cubit.state.isHighContrast, isTrue);
+      cubit.toggleHighContrast();
+      expect(cubit.state.isHighContrast, isFalse);
+    });
+
+    test('increaseTextScale and decreaseTextScale adjust scale within clamp range', () {
+      cubit.increaseTextScale();
+      expect(cubit.state.textScaleFactor, 1.1);
+
+      cubit.increaseTextScale();
+      cubit.increaseTextScale(); // 1.3
+      expect(cubit.state.textScaleFactor, 1.3);
+
+      cubit.decreaseTextScale();
+      expect(cubit.state.textScaleFactor, 1.2);
+    });
+
+    test('resetAccessibility resets state to default', () {
+      cubit.increaseTextScale();
+      cubit.toggleHighContrast();
+      expect(cubit.state.textScaleFactor, 1.1);
+      expect(cubit.state.isHighContrast, isTrue);
+
+      cubit.resetAccessibility();
+      expect(cubit.state.textScaleFactor, 1.0);
+      expect(cubit.state.isElderlyMode, isFalse);
+      expect(cubit.state.isHighContrast, isFalse);
+    });
   });
 
   group('NcdLifestyleAdvisor', () {

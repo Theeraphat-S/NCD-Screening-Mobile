@@ -9,6 +9,7 @@ import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
 import 'package:mobile_app_standard/feature/nurse/pages/nurse_village_list_page.dart';
 import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
 import 'package:mobile_app_standard/feature/patient/pages/patient_detail_page.dart';
+import 'package:mobile_app_standard/shared/bloc/accessibility/accessibility_cubit.dart';
 
 class DirectMockNcdRepository implements NcdRepositoryInterface {
   final List<Village> _villages = const [
@@ -155,6 +156,7 @@ void main() {
       final villageBloc = VillageBloc(repository);
       final villageAnalyticsBloc = VillageAnalyticsBloc(repository);
       final patientBloc = PatientBloc(repository);
+      final accessibilityCubit = AccessibilityCubit();
 
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -162,6 +164,7 @@ void main() {
             BlocProvider<VillageBloc>.value(value: villageBloc),
             BlocProvider<VillageAnalyticsBloc>.value(value: villageAnalyticsBloc),
             BlocProvider<PatientBloc>.value(value: patientBloc),
+            BlocProvider<AccessibilityCubit>.value(value: accessibilityCubit),
           ],
           child: MaterialApp(
             home: NurseVillageListPage(nurse: sampleNurse),
@@ -209,6 +212,7 @@ void main() {
       villageBloc.close();
       villageAnalyticsBloc.close();
       patientBloc.close();
+      accessibilityCubit.close();
     });
 
     testWidgets('switches to Tab 2 (Villages & VHV Management) and displays village list', (WidgetTester tester) async {
@@ -220,6 +224,7 @@ void main() {
       final villageBloc = VillageBloc(repository);
       final villageAnalyticsBloc = VillageAnalyticsBloc(repository);
       final patientBloc = PatientBloc(repository);
+      final accessibilityCubit = AccessibilityCubit();
 
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -227,6 +232,7 @@ void main() {
             BlocProvider<VillageBloc>.value(value: villageBloc),
             BlocProvider<VillageAnalyticsBloc>.value(value: villageAnalyticsBloc),
             BlocProvider<PatientBloc>.value(value: patientBloc),
+            BlocProvider<AccessibilityCubit>.value(value: accessibilityCubit),
           ],
           child: MaterialApp(
             home: NurseVillageListPage(nurse: sampleNurse),
@@ -258,6 +264,7 @@ void main() {
       villageBloc.close();
       villageAnalyticsBloc.close();
       patientBloc.close();
+      accessibilityCubit.close();
     });
 
     testWidgets('drills down to a specific village from comparison list', (WidgetTester tester) async {
@@ -269,6 +276,7 @@ void main() {
       final villageBloc = VillageBloc(repository);
       final villageAnalyticsBloc = VillageAnalyticsBloc(repository);
       final patientBloc = PatientBloc(repository);
+      final accessibilityCubit = AccessibilityCubit();
 
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -276,6 +284,7 @@ void main() {
             BlocProvider<VillageBloc>.value(value: villageBloc),
             BlocProvider<VillageAnalyticsBloc>.value(value: villageAnalyticsBloc),
             BlocProvider<PatientBloc>.value(value: patientBloc),
+            BlocProvider<AccessibilityCubit>.value(value: accessibilityCubit),
           ],
           child: MaterialApp(
             home: NurseVillageListPage(nurse: sampleNurse),
@@ -301,6 +310,7 @@ void main() {
       villageBloc.close();
       villageAnalyticsBloc.close();
       patientBloc.close();
+      accessibilityCubit.close();
     });
 
     testWidgets('navigates to PatientDetailPage when tapping a high-risk priority patient', (WidgetTester tester) async {
@@ -312,6 +322,7 @@ void main() {
       final villageBloc = VillageBloc(repository);
       final villageAnalyticsBloc = VillageAnalyticsBloc(repository);
       final patientBloc = PatientBloc(repository);
+      final accessibilityCubit = AccessibilityCubit();
 
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -319,6 +330,7 @@ void main() {
             BlocProvider<VillageBloc>.value(value: villageBloc),
             BlocProvider<VillageAnalyticsBloc>.value(value: villageAnalyticsBloc),
             BlocProvider<PatientBloc>.value(value: patientBloc),
+            BlocProvider<AccessibilityCubit>.value(value: accessibilityCubit),
           ],
           child: MaterialApp(
             home: NurseVillageListPage(nurse: sampleNurse),
@@ -348,6 +360,7 @@ void main() {
       villageBloc.close();
       villageAnalyticsBloc.close();
       patientBloc.close();
+      accessibilityCubit.close();
     });
   });
 }

@@ -6,6 +6,7 @@ import 'package:mobile_app_standard/feature/patient/pages/add_edit_patient_page.
 import 'package:mobile_app_standard/feature/patient/pages/patient_history_list_page.dart';
 import 'package:mobile_app_standard/feature/screening/pages/screening_form_page.dart';
 import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:mobile_app_standard/shared/widgets/patient_accessibility_floating_bubble.dart';
 
 class PatientDetailPage extends StatelessWidget {
   final Patient patient;
@@ -172,82 +173,84 @@ class PatientDetailPage extends StatelessWidget {
               ],
             ],
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Top Card with Avatar & Header
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: PColor.borderSubtle),
-                    boxShadow: PShadow.card,
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: PColor.primaryLight,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: PColor.primaryColor.withValues(alpha: 0.2), width: 2),
-                        ),
-                        child: Center(
-                          child: Text(
-                            currentPatient.patientFname.isNotEmpty ? currentPatient.patientFname.substring(0, 1) : 'P',
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              color: PColor.primaryDark,
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Top Card with Avatar & Header
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: PColor.borderSubtle),
+                        boxShadow: PShadow.card,
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: PColor.primaryLight,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: PColor.primaryColor.withValues(alpha: 0.2), width: 2),
+                            ),
+                            child: Center(
+                              child: Text(
+                                currentPatient.patientFname.isNotEmpty ? currentPatient.patientFname.substring(0, 1) : 'P',
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w700,
+                                  color: PColor.primaryDark,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        currentPatient.fullName,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: PColor.contentColor,
-                          letterSpacing: -0.2,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: PColor.surfaceSubtle,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: PColor.borderSubtle),
-                        ),
-                        child: Text(
-                          'HN: ${currentPatient.patientId} • หมู่ ${currentPatient.villageId.replaceAll('V', '')}',
-                          style: const TextStyle(
-                            fontSize: 12.5,
-                            color: PColor.textSecondary,
-                            fontWeight: FontWeight.w600,
+                          const SizedBox(height: 16),
+                          Text(
+                            currentPatient.fullName,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: PColor.contentColor,
+                              letterSpacing: -0.2,
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: PColor.surfaceSubtle,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: PColor.borderSubtle),
+                            ),
+                            child: Text(
+                              'HN: ${currentPatient.patientId} • หมู่ ${currentPatient.villageId.replaceAll('V', '')}',
+                              style: const TextStyle(
+                                fontSize: 12.5,
+                                color: PColor.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
+                    ),
+                    const SizedBox(height: 16),
 
-                // Patient Information Card
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: PColor.borderSubtle),
-                    boxShadow: PShadow.card,
-                  ),
+                    // Patient Information Card
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: PColor.borderSubtle),
+                        boxShadow: PShadow.card,
+                      ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -347,14 +350,17 @@ class PatientDetailPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-              ],
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-          ),
-        );
-      },
-    );
-  }
+            const PatientAccessibilityFloatingBubble(),
+          ],
+        ),
+      );
+    },
+  );
+}
 
   Widget _buildInfoRow(String label, String value) {
     return Row(

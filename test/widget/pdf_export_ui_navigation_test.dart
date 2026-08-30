@@ -12,6 +12,7 @@ import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
 import 'package:mobile_app_standard/feature/screening/pages/pdf_preview_page.dart';
 import 'package:mobile_app_standard/feature/screening/pages/risk_assessment_result_page.dart';
 import 'package:mobile_app_standard/locator.dart';
+import 'package:mobile_app_standard/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
@@ -47,6 +48,7 @@ void main() {
   late MockNcdRepository mockRepository;
   late ScreeningBloc screeningBloc;
   late PatientBloc patientBloc;
+  late AccessibilityCubit accessibilityCubit;
   late FakePdfReportService fakePdfService;
 
   final samplePatient = Patient(
@@ -140,6 +142,7 @@ void main() {
     mockRepository = MockNcdRepository();
     screeningBloc = ScreeningBloc(mockRepository);
     patientBloc = PatientBloc(mockRepository);
+    accessibilityCubit = AccessibilityCubit();
     fakePdfService = FakePdfReportService();
 
     locator.reset();
@@ -149,6 +152,7 @@ void main() {
   tearDown(() {
     screeningBloc.close();
     patientBloc.close();
+    accessibilityCubit.close();
     locator.reset();
   });
 
@@ -161,6 +165,7 @@ void main() {
       providers: [
         BlocProvider<ScreeningBloc>.value(value: screeningBloc),
         BlocProvider<PatientBloc>.value(value: patientBloc),
+        BlocProvider<AccessibilityCubit>.value(value: accessibilityCubit),
       ],
       child: MaterialApp(
         home: PatientScreeningDetailPage(
@@ -181,6 +186,7 @@ void main() {
       providers: [
         BlocProvider<ScreeningBloc>.value(value: screeningBloc),
         BlocProvider<PatientBloc>.value(value: patientBloc),
+        BlocProvider<AccessibilityCubit>.value(value: accessibilityCubit),
       ],
       child: MaterialApp(
         home: RiskAssessmentResultPage(
@@ -202,12 +208,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('ผลคัดกรอง: สมชาย ใจดี'), findsOneWidget);
-      expect(find.text('สถานะ: รอพิจารณา'), findsOneWidget);
-      expect(find.text('นายสมชาย ใจดี'), findsOneWidget);
-      expect(find.text('ตอนที่ 1: ตรวจร่างกาย'), findsOneWidget);
-      expect(find.text('ตอนที่ 2: ประวัติบุคคล/ครอบครัว'), findsOneWidget);
-      expect(find.text('ผลการประเมิน (4 โรค)'), findsOneWidget);
-      expect(find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)'), findsOneWidget);
+      expect(find.text('รอพยาบาลตรวจสอบและรับรองผล'), findsOneWidget);
+      expect(find.text('ผลการประเมินความเสี่ยง 4 โรค'), findsOneWidget);
+      expect(find.text('ข้อมูลสัญญาณชีพและร่างกาย'), findsOneWidget);
+      expect(find.text('ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)'), findsOneWidget);
       expect(find.byIcon(Icons.picture_as_pdf_outlined), findsNWidgets(2)); // AppBar icon + Button icon
     });
 
@@ -222,7 +226,7 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('สถานะ: อนุมัติแล้ว'), findsOneWidget);
+      expect(find.text('ผ่านการรับรองโดยพยาบาลแล้ว'), findsOneWidget);
       expect(find.text('ประเมินและยืนยันผล (Submit)'), findsOneWidget);
     });
 
@@ -256,7 +260,7 @@ void main() {
       await tester.pumpWidget(buildDetailApp(screening: sampleApprovedScreening, nurse: sampleNurse));
       await tester.pumpAndSettle();
 
-      final exportButton = find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)');
+      final exportButton = find.text('ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)');
       await tester.ensureVisible(exportButton);
       await tester.tap(exportButton);
       await tester.pump();
@@ -280,7 +284,7 @@ void main() {
       await tester.pumpWidget(buildDetailApp(screening: samplePendingScreening));
       await tester.pumpAndSettle();
 
-      expect(find.text('สถานะ: รอพิจารณา'), findsOneWidget);
+      expect(find.text('รอพยาบาลตรวจสอบและรับรองผล'), findsOneWidget);
 
       // Nurse approves screening -> bloc emits updated historyList
       screeningBloc.emit(ScreeningState(
@@ -289,7 +293,7 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('สถานะ: อนุมัติแล้ว'), findsOneWidget);
+      expect(find.text('ผ่านการรับรองโดยพยาบาลแล้ว'), findsOneWidget);
     });
   });
 
