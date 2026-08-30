@@ -91,12 +91,13 @@ class VillageAnalyticsCalculator {
 ```
 
 ## Code Layout
-- `lib/domain/models/`: Domain models (`ncd_models.dart`, `village_analytics.dart`) & Drift tables (`ncd_tables.dart`)
-- `lib/domain/datasource/`: Drift database definition (`app_datebase.dart`, `app_datebase.g.dart`)
-- `lib/domain/repositories/`: Repository interfaces & implementations (`ncd_repository.dart`, `drift_ncd_repository.dart`)
-- `lib/domain/services/`: Calculation & reporting services (`ncd_risk_calculator.dart`, `pdf_report_service.dart`, `village_analytics_calculator.dart`)
-- `lib/feature/nurse/`: Nurse feature pages and BLoCs (`nurse_village_list_page.dart`, `bloc/village_analytics_bloc.dart`)
-- `lib/feature/screening/`: Screening pages (`risk_assessment_result_page.dart`, `pdf_preview_page.dart`)
+- `lib/data/datasources/drift/`: Drift SQLite database definition (`app_database.dart`, `app_database.g.dart`) & schema tables (`ncd_tables.dart`)
+- `lib/data/repositories/`: Data repository implementations (`drift_ncd_repository.dart`)
+- `lib/domain/models/`: Pure domain entities (`ncd_models.dart`, `village_analytics.dart`, `sync_queue_item.dart`)
+- `lib/domain/repositories/`: Repository interfaces (`ncd_repository.dart`)
+- `lib/domain/services/`: Calculation, triage & reporting services (`ncd_risk_calculator.dart`, `pdf_report_service.dart`, `village_analytics_calculator.dart`)
+- `lib/feature/nurse/`: Nurse feature pages, widgets, and BLoCs (`nurse_village_list_page.dart`, `widgets/`, `bloc/village_analytics_bloc.dart`)
+- `lib/feature/screening/`: Screening pages (`risk_assessment_result_page.dart`, `pdf_preview_page.dart`, `screening_form_page.dart`)
 - `lib/feature/patient/`: Patient pages (`patient_screening_detail_page.dart`, `patient_detail_page.dart`)
 - `lib/locator.dart`: GetIt dependency injection registry
 - `test/unit/`: Domain, data, repository, service, and BLoC unit tests
