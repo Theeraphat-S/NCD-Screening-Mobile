@@ -29,7 +29,7 @@ class AccessibilityScaleToggle extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: state.isElderlyMode ? PColor.riskModerate : Colors.white.withOpacity(0.2),
+              color: state.isElderlyMode ? PColor.riskModerate : Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: state.isElderlyMode ? PColor.riskModerate : Colors.white54,
@@ -127,10 +127,10 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: riskColor.withOpacity(0.3), width: 1.5),
+            border: Border.all(color: riskColor.withValues(alpha: 0.3), width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.04),
+                color: Colors.black.withValues(alpha: 0.04),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

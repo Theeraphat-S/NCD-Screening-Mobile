@@ -195,7 +195,7 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
                   children: [
                     CircleAvatar(
                       radius: 36,
-                      backgroundColor: PColor.primaryLight.withOpacity(0.15),
+                      backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
                       child: const Icon(Icons.volunteer_activism_rounded, size: 40, color: PColor.primaryColor),
                     ),
                     const SizedBox(width: 20),

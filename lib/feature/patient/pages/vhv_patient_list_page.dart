@@ -95,7 +95,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.12),
+                    color: Colors.white.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(Icons.volunteer_activism_rounded, color: Colors.white, size: 18),
@@ -116,7 +116,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                       Text(
                         'พื้นที่รับผิดชอบ: หมู่ที่ ${widget.vhv.villageId.replaceAll('V', '')} รพ.สต.แม่อาย',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                           fontSize: 12,
                         ),
                       ),
@@ -321,7 +321,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                 Container(
                   width: 30,
                   height: 30,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: PColor.surfaceSubtle,
                     shape: BoxShape.circle,
                   ),

@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: BoxDecoration(
                             color: PColor.primaryLight,
                             shape: BoxShape.circle,
-                            border: Border.all(color: PColor.primaryColor.withOpacity(0.2)),
+                            border: Border.all(color: PColor.primaryColor.withValues(alpha: 0.2)),
                           ),
                           child: Icon(
                             widget.role == UserRole.patient

@@ -301,7 +301,6 @@ class RiskAssessmentResultPage extends StatelessWidget {
   Widget _buildStepItem({
     required String number,
     required String label,
-    bool isActive = false,
     bool isDone = false,
   }) {
     return Column(
@@ -322,7 +321,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 ? const Icon(Icons.check, size: 16, color: Colors.white)
                 : Text(
                     number,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: PColor.textNeutralColor,
@@ -421,7 +420,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: badgeBg,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: badgeColor.withOpacity(0.3)),
+                  border: Border.all(color: badgeColor.withValues(alpha: 0.3)),
                 ),
                 child: Text(
                   'ความเสี่ยง${result.riskLevel.labelTh}',

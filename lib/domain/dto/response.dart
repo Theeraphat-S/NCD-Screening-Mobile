@@ -1,7 +1,7 @@
 class StandardResponseBody {
   final bool ok;
   final dynamic data;
-  final error;
+  final dynamic error;
 
   StandardResponseBody({required this.ok, this.data, this.error});
 

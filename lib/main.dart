@@ -8,7 +8,6 @@ import 'package:mobile_app_standard/feature/nurse/bloc/village_analytics_bloc.da
 import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
 import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
 import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
-import 'package:mobile_app_standard/feature/todo/bloc/todo_bloc.dart';
 import 'package:mobile_app_standard/feature/vhv/bloc/vhv_bloc.dart';
 import 'package:mobile_app_standard/i18n/i18n.dart';
 import 'package:mobile_app_standard/locator.dart';
@@ -36,7 +35,6 @@ Future<void> main() async {
           create: (context) => locator<SyncBadgeBloc>()..add(const SyncBadgeStarted()),
         ),
         BlocProvider<AccessibilityCubit>(create: (context) => locator<AccessibilityCubit>()),
-        BlocProvider<TodoBloc>(create: (context) => locator<TodoBloc>()),
         BlocProvider<WebsocketBloc>(create: (context) => locator<WebsocketBloc>()),
         BlocProvider<LanguageBloc>(create: (context) => locator<LanguageBloc>()),
       ],
@@ -64,7 +62,6 @@ class NcdScreeningApp extends StatelessWidget {
               primary: PColor.primaryColor,
               secondary: PColor.secondaryColor,
               surface: PColor.neutralColor,
-              background: PColor.backgroundColor,
               error: PColor.errorColor,
             ),
             scaffoldBackgroundColor: PColor.backgroundColor,
@@ -80,7 +77,7 @@ class NcdScreeningApp extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            cardTheme: CardTheme(
+            cardTheme: CardThemeData(
               color: Colors.white,
               elevation: 0,
               shape: RoundedRectangleBorder(

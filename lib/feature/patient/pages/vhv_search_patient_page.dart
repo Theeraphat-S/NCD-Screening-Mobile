@@ -84,7 +84,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -259,7 +259,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
             children: [
               CircleAvatar(
                 radius: 26,
-                backgroundColor: PColor.primaryLight.withOpacity(0.15),
+                backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
                 child: const Icon(Icons.person, color: PColor.primaryColor, size: 30),
               ),
               const SizedBox(width: 14),

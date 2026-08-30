@@ -116,7 +116,7 @@ class HomePage extends HookWidget {
 
     final bodyContent = Container(
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -131,11 +131,11 @@ class HomePage extends HookWidget {
           margin: const EdgeInsets.symmetric(horizontal: PSpacing.lg),
           padding: const EdgeInsets.all(PSpacing.xl),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white.withValues(alpha: 0.7),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),
@@ -146,16 +146,16 @@ class HomePage extends HookWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Welcome to",
-                style: const TextStyle(
+              const Text(
+                'Welcome to',
+                style: TextStyle(
                   fontSize: PText.textLg,
                   color: Colors.grey,
                   decoration: TextDecoration.none,
                 ),
               ),
               const SizedBox(height: PSpacing.xs),
-              Text(
+              const Text(
                 'Fakduai APP',
                 style: TextStyle(
                   fontSize: 32,

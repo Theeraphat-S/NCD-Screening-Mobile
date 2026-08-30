@@ -171,7 +171,7 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundColor: PColor.primaryLight.withOpacity(0.15),
+                backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
                 child: const Icon(Icons.volunteer_activism_rounded, color: PColor.primaryColor, size: 26),
               ),
               const SizedBox(width: 14),

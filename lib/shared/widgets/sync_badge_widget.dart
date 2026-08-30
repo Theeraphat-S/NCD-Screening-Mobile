@@ -94,7 +94,7 @@ class SyncBadgeWidget extends StatelessWidget {
                   color: state.pendingCount == 0 ? PColor.riskLowBg : PColor.riskModerateBg,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: state.pendingCount == 0 ? PColor.riskLow.withOpacity(0.3) : PColor.riskModerate.withOpacity(0.3),
+                    color: state.pendingCount == 0 ? PColor.riskLow.withValues(alpha: 0.3) : PColor.riskModerate.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
@@ -199,7 +199,7 @@ class SyncBadgeWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
+                    color: Colors.black.withValues(alpha: 0.15),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),

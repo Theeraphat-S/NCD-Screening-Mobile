@@ -15,9 +15,9 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
       InitializeLanguageEvent event, Emitter<LanguageState> emit) async {
     try {
       Intl.defaultLocale = 'en';
-      emit(state.copyWith(locale: Locale('en')));
+      emit(state.copyWith(locale: const Locale('en')));
     } catch (e) {
-      print('Error during language initialization: $e');
+      debugPrint('Error during language initialization: $e');
     }
   }
 
@@ -27,7 +27,7 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
       Intl.defaultLocale = event.locale.languageCode;
       emit(state.copyWith(locale: event.locale));
     } catch (e) {
-      print('Error changing language: $e');
+      debugPrint('Error changing language: $e');
     }
   }
 

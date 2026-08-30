@@ -14,7 +14,7 @@ class AppBarCustom extends StatelessWidget
   Widget build(BuildContext context) {
     if (Platform.isIOS) {
       return CupertinoNavigationBar(
-        backgroundColor: Colors.white.withOpacity(0.8), // Translucent
+        backgroundColor: Colors.white.withValues(alpha: 0.8), // Translucent
         border: const Border(
           bottom: BorderSide(color: Color(0x33000000), width: 0.0),
         ), // Remove explicit border for glass effect
@@ -43,7 +43,7 @@ class AppBarCustom extends StatelessWidget
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),

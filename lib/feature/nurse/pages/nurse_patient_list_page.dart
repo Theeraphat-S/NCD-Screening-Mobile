@@ -193,7 +193,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                 Container(
                   width: 30,
                   height: 30,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: PColor.surfaceSubtle,
                     shape: BoxShape.circle,
                   ),

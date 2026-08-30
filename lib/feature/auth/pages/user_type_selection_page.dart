@@ -63,12 +63,12 @@ class UserTypeSelectionPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.location_on_outlined, size: 16, color: PColor.textNeutralColor),
-                      const SizedBox(width: 4),
-                      const Text(
+                      Icon(Icons.location_on_outlined, size: 16, color: PColor.textNeutralColor),
+                      SizedBox(width: 4),
+                      Text(
                         'รพ.สต.แม่อาย จ.เชียงใหม่',
                         style: TextStyle(
                           fontSize: 14,
@@ -213,7 +213,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                 Container(
                   width: 32,
                   height: 32,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: PColor.surfaceSubtle,
                     shape: BoxShape.circle,
                   ),

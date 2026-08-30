@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:mobile_app_standard/domain/datasource/app_datebase.dart';
+import 'package:mobile_app_standard/data/datasources/drift/app_database.dart';
 import 'package:mobile_app_standard/domain/models/ncd_models.dart';
 import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
 

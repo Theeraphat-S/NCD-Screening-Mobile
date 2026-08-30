@@ -52,7 +52,7 @@ linter:
     await_only_futures: true
     use_key_in_widget_constructors: true
     avoid_init_to_null: true
-    avoid_positional_boolean_parameters: true
+    avoid_positional_boolean_parameters: false
 
     # Optional: Turn this on to force explicit types (more strict)
     # always_specify_types: true

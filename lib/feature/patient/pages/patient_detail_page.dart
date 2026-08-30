@@ -194,7 +194,7 @@ class PatientDetailPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: PColor.primaryLight,
                           shape: BoxShape.circle,
-                          border: Border.all(color: PColor.primaryColor.withOpacity(0.2), width: 2),
+                          border: Border.all(color: PColor.primaryColor.withValues(alpha: 0.2), width: 2),
                         ),
                         child: Center(
                           child: Text(

@@ -82,18 +82,18 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
       } else {
         // Not found, navigate to AddEditPatientPage with pre-filled fields
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.person_add_alt_1_rounded, color: Colors.white, size: 20),
-                const SizedBox(width: 8),
-                const Expanded(
+                Icon(Icons.person_add_alt_1_rounded, color: Colors.white, size: 20),
+                SizedBox(width: 8),
+                Expanded(
                   child: Text('ไม่พบประวัติเดิม - ระบบเติมข้อมูลลงทะเบียนใหม่ให้อัตโนมัติ'),
                 ),
               ],
             ),
             backgroundColor: PColor.primaryDark,
-            duration: const Duration(seconds: 2),
+            duration: Duration(seconds: 2),
           ),
         );
 
@@ -167,7 +167,7 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.8),
+        backgroundColor: Colors.black.withValues(alpha: 0.8),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
@@ -207,7 +207,7 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
                   decoration: BoxDecoration(
                     border: Border.all(color: PColor.primaryLight, width: 2.5),
                     borderRadius: BorderRadius.circular(16),
-                    color: Colors.white.withOpacity(0.06),
+                    color: Colors.white.withValues(alpha: 0.06),
                   ),
                   child: Stack(
                     children: [
@@ -220,7 +220,7 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
                               width: 32,
                               height: 24,
                               decoration: BoxDecoration(
-                                color: Colors.amber.shade300.withOpacity(0.6),
+                                color: Colors.amber.shade300.withValues(alpha: 0.6),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                             ),

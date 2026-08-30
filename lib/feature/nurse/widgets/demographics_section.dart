@@ -1,0 +1,220 @@
+import 'package:flutter/material.dart';
+import 'package:mobile_app_standard/domain/models/village_analytics.dart';
+import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+
+class DemographicsSection extends StatelessWidget {
+  final DemographicDistribution demographics;
+
+  const DemographicsSection({super.key, required this.demographics});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.pie_chart_outline_rounded,
+                  color: PColor.primaryColor, size: 22),
+              SizedBox(width: 8),
+              Text(
+                'การกระจายตัวของประชากร',
+                style: TextStyle(
+                  fontSize: 15.5,
+                  fontWeight: FontWeight.bold,
+                  color: PColor.contentColor,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          // Gender Ratio
+          const Text(
+            'สัดส่วนเพศ (Gender Ratio)',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: PColor.contentColor,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: SizedBox(
+              height: 12,
+              child: demographics.totalPatients == 0
+                  ? Container(color: Colors.grey.shade200)
+                  : Row(
+                      children: [
+                        if (demographics.maleCount > 0)
+                          Expanded(
+                            flex: demographics.maleCount,
+                            child: Container(color: const Color(0xFF3B82F6)),
+                          ),
+                        if (demographics.femaleCount > 0)
+                          Expanded(
+                            flex: demographics.femaleCount,
+                            child: Container(color: const Color(0xFFEC4899)),
+                          ),
+                      ],
+                    ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF3B82F6),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'ชาย: ${demographics.maleCount} คน (${demographics.maleRatio}%)',
+                    style: const TextStyle(fontSize: 11.5),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFEC4899),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'หญิง: ${demographics.femaleCount} คน (${demographics.femaleRatio}%)',
+                    style: const TextStyle(fontSize: 11.5),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const Divider(height: 24),
+
+          // Age Brackets
+          const Text(
+            'กลุ่มช่วงอายุ (Age Groups)',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: PColor.contentColor,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: _buildAgeBracketCard(
+                  label: '< 35 ปี',
+                  desc: 'วัยหนุ่มสาว',
+                  count: demographics.ageUnder35Count,
+                  percentage: demographics.ageUnder35Ratio,
+                  color: const Color(0xFF10B981),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildAgeBracketCard(
+                  label: '35–59 ปี',
+                  desc: 'วัยทำงาน',
+                  count: demographics.age35To59Count,
+                  percentage: demographics.age35To59Ratio,
+                  color: const Color(0xFFF59E0B),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildAgeBracketCard(
+                  label: '≥ 60 ปี',
+                  desc: 'ผู้สูงอายุ',
+                  count: demographics.age60AndAboveCount,
+                  percentage: demographics.age60AndAboveRatio,
+                  color: const Color(0xFF8B5CF6),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAgeBracketCard({
+    required String label,
+    required String desc,
+    required int count,
+    required double percentage,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            desc,
+            style: const TextStyle(
+              fontSize: 10.5,
+              color: PColor.textNeutralColor,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '$count คน',
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: PColor.contentColor,
+            ),
+          ),
+          Text(
+            '$percentage%',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

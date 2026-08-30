@@ -178,37 +178,37 @@ class NcdLifestyleAdvisor {
 
   static PlainHealthAdvice _buildCvdAdvice(double pulse, RiskLevel level) {
     if (level == RiskLevel.high) {
-      return PlainHealthAdvice(
+      return const PlainHealthAdvice(
         diseaseName: 'โรคหลอดเลือดหัวใจและสมอง',
         conditionSummary: 'ประเมินความเสี่ยงโรคหลอดเลือดหัวใจอยู่ในระดับสูง',
         riskLevel: RiskLevel.high,
         riskLabelThai: 'เสี่ยงสูง (ควรพบแพทย์)',
-        goodFoods: const ['ปลาทะเล ปลาน้ำจืดสด', 'กระเทียม หอมแดง', 'น้ำมันรำข้าว น้ำมันมะกอก'],
-        avoidFoods: const ['ไขมันทรานส์ ครีมเทียม เนยเทียม', 'หมูกรอบ หนังไก่ทอด แคบหมูติดมัน', 'เครื่องในสัตว์ ไข่แดงเกินวันละ 1 ฟอง'],
+        goodFoods: ['ปลาทะเล ปลาน้ำจืดสด', 'กระเทียม หอมแดง', 'น้ำมันรำข้าว น้ำมันมะกอก'],
+        avoidFoods: ['ไขมันทรานส์ ครีมเทียม เนยเทียม', 'หมูกรอบ หนังไก่ทอด แคบหมูติดมัน', 'เครื่องในสัตว์ ไข่แดงเกินวันละ 1 ฟอง'],
         exerciseTip: 'ปรึกษาแพทย์ก่อนเริ่มโปรแกรมออกกำลังกายหนัก เน้นเดินราบเบาๆ',
         dailyAdvice: 'งดสูบบุหรี่และงดดื่มแอลกอฮอล์เด็ดขาด หลีกเลี่ยงความเครียด',
         followUpSchedule: 'นัดพบแพทย์ รพ.สต. เพื่อตรวจคลื่นไฟฟ้าหัวใจและประเมินเชิงลึก',
       );
     } else if (level == RiskLevel.moderate) {
-      return PlainHealthAdvice(
+      return const PlainHealthAdvice(
         diseaseName: 'โรคหลอดเลือดหัวใจและสมอง',
         conditionSummary: 'ประเมินความเสี่ยงโรคหลอดเลือดอยู่ในเกณฑ์ปานกลาง',
         riskLevel: RiskLevel.moderate,
         riskLabelThai: 'เสี่ยงปานกลาง',
-        goodFoods: const ['เนื้อปลา', 'ผักใบเขียว', 'ถั่วอัลมอนด์ เม็ดมะม่วงไม่ทอด'],
-        avoidFoods: const ['แกงกะทิเข้มข้น', 'ของทอดน้ำมันซ้ำ'],
+        goodFoods: ['เนื้อปลา', 'ผักใบเขียว', 'ถั่วอัลมอนด์ เม็ดมะม่วงไม่ทอด'],
+        avoidFoods: ['แกงกะทิเข้มข้น', 'ของทอดน้ำมันซ้ำ'],
         exerciseTip: 'เดินเร็วหรือแกว่งแขนวันละ 30 นาที',
         dailyAdvice: 'เลี่ยงอาหารมัน ทอด และควบคุมอารมณ์ไม่ให้เครียดสะสม',
         followUpSchedule: 'ตรวจติดตามอาการทุก 6 เดือน',
       );
     } else {
-      return PlainHealthAdvice(
+      return const PlainHealthAdvice(
         diseaseName: 'โรคหลอดเลือดหัวใจและสมอง',
         conditionSummary: 'สุขภาพหลอดเลือดและหัวใจอยู่ในเกณฑ์ดีมาก',
         riskLevel: RiskLevel.low,
         riskLabelThai: 'ปกติ ปลอดภัย',
-        goodFoods: const ['ปลา ผัก ธัญพืช', 'น้ำมันพืชปรุงอาหาร'],
-        avoidFoods: const ['ของมันของทอดปริมาณมาก'],
+        goodFoods: ['ปลา ผัก ธัญพืช', 'น้ำมันพืชปรุงอาหาร'],
+        avoidFoods: ['ของมันของทอดปริมาณมาก'],
         exerciseTip: 'ออกกำลังกายกระตุ้นหัวใจสม่ำเสมอ',
         dailyAdvice: 'รักษาสุขภาพจิตแจ่มใส และนอนหลับ 7-8 ชั่วโมง',
         followUpSchedule: 'ตรวจคัดกรองประจำปี',

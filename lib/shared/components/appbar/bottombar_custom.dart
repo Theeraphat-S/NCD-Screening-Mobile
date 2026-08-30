@@ -14,7 +14,6 @@ class BottomBarCustom extends HookWidget {
 
   int _getIndexFromRoute(String routeName) {
     if (routeName == HomeRoute.name) return 0;
-    if (routeName == TodoRoute.name) return 1;
     return 0;
   }
 
@@ -30,8 +29,6 @@ class BottomBarCustom extends HookWidget {
     void onItemTapped(int index) {
       if (index == 0 && currentRouteName != HomeRoute.name) {
         context.router.push(const HomeRoute());
-      } else if (index == 1 && currentRouteName != TodoRoute.name) {
-        context.router.push(const TodoRoute());
       }
       selectedIndex.value = index;
     }
@@ -46,12 +43,8 @@ class BottomBarCustom extends HookWidget {
         inactiveColor: Colors.black,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.home),
+            icon: const Icon(CupertinoIcons.home),
             label: msg.home_route_name,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.list_bullet),
-            label: msg.todo_route_name,
           ),
         ],
       );
@@ -64,12 +57,8 @@ class BottomBarCustom extends HookWidget {
       unselectedItemColor: Colors.black,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: const Icon(Icons.home),
           label: msg.home_route_name,
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.list),
-          label: msg.todo_route_name,
         ),
       ],
     );

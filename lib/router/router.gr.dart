@@ -25,19 +25,3 @@ class HomeRoute extends PageRouteInfo<void> {
     },
   );
 }
-
-/// generated route for
-/// [TodoPage]
-class TodoRoute extends PageRouteInfo<void> {
-  const TodoRoute({List<PageRouteInfo>? children})
-    : super(TodoRoute.name, initialChildren: children);
-
-  static const String name = 'TodoRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const TodoPage();
-    },
-  );
-}

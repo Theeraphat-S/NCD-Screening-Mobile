@@ -206,7 +206,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                     children: [
                       CircleAvatar(
                         radius: 36,
-                        backgroundColor: PColor.primaryLight.withOpacity(0.15),
+                        backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
                         child: const Icon(Icons.person, size: 40, color: PColor.primaryColor),
                       ),
                       const SizedBox(width: 20),

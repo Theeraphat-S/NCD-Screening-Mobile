@@ -1,13 +1,11 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:mobile_app_standard/domain/models/ncd_tables.dart';
-import 'package:mobile_app_standard/domain/models/todo_table.dart';
+import 'package:mobile_app_standard/data/datasources/drift/ncd_tables.dart';
 import 'package:mobile_app_standard/domain/services/ncd_risk_calculator.dart';
 
-part 'app_datebase.g.dart';
+part 'app_database.g.dart';
 
 @DriftDatabase(tables: [
-  TodoItems,
   VillagesTable,
   NursesTable,
   VhvsTable,
@@ -31,9 +29,7 @@ class AppDatabase extends _$AppDatabase {
           await m.createAll();
         },
         onUpgrade: (Migrator m, int from, int to) async {
-          if (from == 1 && to == 2) {
-            await m.addColumn(todoItems, todoItems.priority);
-          } else if (from < 3) {
+          if (from < 3) {
             await m.createTable(villagesTable);
             await m.createTable(nursesTable);
             await m.createTable(vhvsTable);

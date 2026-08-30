@@ -20,9 +20,8 @@ class EmergencyHospitalCard extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    final isCrisis = triage.urgencyLevel == TriageUrgencyLevel.emergency;
-    final cardColor = PColor.riskHigh;
-    final bgColor = PColor.riskHighBg;
+    const cardColor = PColor.riskHigh;
+    const bgColor = PColor.riskHighBg;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 18),
@@ -33,7 +32,7 @@ class EmergencyHospitalCard extends StatelessWidget {
         border: Border.all(color: cardColor, width: 2),
         boxShadow: [
           BoxShadow(
-            color: cardColor.withOpacity(0.12),
+            color: cardColor.withValues(alpha: 0.12),
             blurRadius: 14,
             offset: const Offset(0, 4),
           ),
@@ -58,7 +57,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'การแจ้งเตือนเคสเร่งด่วน',
                       style: TextStyle(
                         fontSize: 13,
@@ -100,17 +99,17 @@ class EmergencyHospitalCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: cardColor.withOpacity(0.3)),
+              border: Border.all(color: cardColor.withValues(alpha: 0.3)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.health_and_safety_rounded, color: cardColor, size: 18),
+                const Icon(Icons.health_and_safety_rounded, color: cardColor, size: 18),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     triage.recommendedAction,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13.5,
                       fontWeight: FontWeight.bold,
                       color: cardColor,
@@ -155,7 +154,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                 child: OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     foregroundColor: cardColor,
-                    side: BorderSide(color: cardColor, width: 1.5),
+                    side: const BorderSide(color: cardColor, width: 1.5),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     backgroundColor: Colors.white,
