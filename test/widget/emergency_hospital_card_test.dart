@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/domain/services/clinical_triage_service.dart';
-import 'package:mobile_app_standard/shared/widgets/emergency_hospital_card.dart';
+import 'package:ncd_screening_mobile/domain/services/clinical_triage_service.dart';
+import 'package:ncd_screening_mobile/shared/widgets/emergency_hospital_card.dart';
 
 void main() {
   group('EmergencyHospitalCard', () {

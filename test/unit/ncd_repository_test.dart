@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 
 void main() {
   late MockNcdRepository repository;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/models/village_analytics.dart';
-import 'package:mobile_app_standard/feature/patient/pages/patient_detail_page.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
+import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class HighRiskQueueList extends StatelessWidget {
   final List<HighRiskPriorityPatient> queue;

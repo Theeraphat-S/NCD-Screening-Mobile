@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:mobile_app_standard/domain/models/sync_queue_item.dart';
+import 'package:ncd_screening_mobile/domain/models/sync_queue_item.dart';
 
 abstract class SyncQueueServiceInterface {
   Future<void> enqueue(SyncQueueItem item);

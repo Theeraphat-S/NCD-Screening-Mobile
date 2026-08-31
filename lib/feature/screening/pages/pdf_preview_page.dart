@@ -1,8 +1,8 @@
-﻿import 'package:flutter/material.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/services/pdf_report_service.dart';
-import 'package:mobile_app_standard/locator.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
+import 'package:ncd_screening_mobile/locator.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:printing/printing.dart';
 
 class PdfPreviewPage extends StatelessWidget {
@@ -45,7 +45,7 @@ class PdfPreviewPage extends StatelessWidget {
         title: Column(
           children: [
             const Text(
-              'ตัวอย่างรายงาน PDF',
+              '?????????????? PDF',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
@@ -53,7 +53,7 @@ class PdfPreviewPage extends StatelessWidget {
               ),
             ),
             Text(
-              '${patient.fullName} • ${screening.screenId}',
+              '${patient.fullName} � ${screening.screenId}',
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.white70,
@@ -84,7 +84,7 @@ class PdfPreviewPage extends StatelessWidget {
               CircularProgressIndicator(color: PColor.primaryColor),
               SizedBox(height: 12),
               Text(
-                'กำลังสร้างเอกสารรายงาน PDF...',
+                '?????????????????????? PDF...',
                 style: TextStyle(color: PColor.textNeutralColor, fontSize: 13),
               ),
             ],
@@ -99,7 +99,7 @@ class PdfPreviewPage extends StatelessWidget {
                 const Icon(Icons.error_outline_rounded, color: Colors.red, size: 48),
                 const SizedBox(height: 12),
                 const Text(
-                  'เกิดข้อผิดพลาดในการสร้างเอกสาร PDF',
+                  '?????????????????????????????? PDF',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

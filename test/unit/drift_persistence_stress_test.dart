@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/data/datasources/drift/app_database.dart';
-import 'package:mobile_app_standard/data/repositories/drift_ncd_repository.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
-import 'package:mobile_app_standard/locator.dart';
+import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
+import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/locator.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

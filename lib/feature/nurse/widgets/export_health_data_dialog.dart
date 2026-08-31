@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
-import 'package:mobile_app_standard/domain/services/health_data_export_service.dart';
-import 'package:mobile_app_standard/locator.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/services/health_data_export_service.dart';
+import 'package:ncd_screening_mobile/locator.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class ExportHealthDataDialog extends StatefulWidget {
   final Nurse nurse;

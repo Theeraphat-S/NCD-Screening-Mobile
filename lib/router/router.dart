@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:mobile_app_standard/feature/home/pages/home_page.dart';
+import 'package:ncd_screening_mobile/feature/home/pages/home_page.dart';
 
 part 'router.gr.dart';
 

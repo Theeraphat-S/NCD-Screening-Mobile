@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/config/config.dart';
-import 'package:mobile_app_standard/feature/auth/bloc/auth_bloc.dart';
-import 'package:mobile_app_standard/feature/auth/pages/user_type_selection_page.dart';
-import 'package:mobile_app_standard/feature/home/bloc/websocket/websocket_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_analytics_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
-import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
-import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
-import 'package:mobile_app_standard/feature/vhv/bloc/vhv_bloc.dart';
-import 'package:mobile_app_standard/i18n/i18n.dart';
-import 'package:mobile_app_standard/locator.dart';
-import 'package:mobile_app_standard/shared/bloc/accessibility/accessibility_cubit.dart';
-import 'package:mobile_app_standard/shared/bloc/language/language_bloc.dart';
-import 'package:mobile_app_standard/shared/bloc/language/language_state.dart';
-import 'package:mobile_app_standard/shared/bloc/sync_badge_bloc.dart';
-import 'package:mobile_app_standard/shared/theme/app_theme.dart';
+import 'package:ncd_screening_mobile/config/config.dart';
+import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
+import 'package:ncd_screening_mobile/feature/auth/pages/user_type_selection_page.dart';
+import 'package:ncd_screening_mobile/feature/home/bloc/websocket/websocket_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
+import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
+import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
+import 'package:ncd_screening_mobile/feature/vhv/bloc/vhv_bloc.dart';
+import 'package:ncd_screening_mobile/i18n/i18n.dart';
+import 'package:ncd_screening_mobile/locator.dart';
+import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
+import 'package:ncd_screening_mobile/shared/bloc/language/language_bloc.dart';
+import 'package:ncd_screening_mobile/shared/bloc/language/language_state.dart';
+import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
+import 'package:ncd_screening_mobile/shared/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

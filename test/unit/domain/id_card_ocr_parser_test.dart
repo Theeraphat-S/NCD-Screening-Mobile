@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/domain/services/id_card_ocr_parser.dart';
+import 'package:ncd_screening_mobile/domain/services/id_card_ocr_parser.dart';
 
 void main() {
   group('IdCardOcrParser', () {

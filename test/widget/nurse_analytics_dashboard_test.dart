@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
-import 'package:mobile_app_standard/domain/services/ncd_risk_calculator.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_analytics_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/pages/nurse_village_list_page.dart';
-import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
-import 'package:mobile_app_standard/feature/patient/pages/patient_detail_page.dart';
-import 'package:mobile_app_standard/shared/bloc/accessibility/accessibility_cubit.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_village_list_page.dart';
+import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
+import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.dart';
+import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
 
 class DirectMockNcdRepository implements NcdRepositoryInterface {
   final List<Village> _villages = const [

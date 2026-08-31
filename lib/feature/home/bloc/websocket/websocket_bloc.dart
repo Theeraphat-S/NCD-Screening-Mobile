@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/domain/http_client/websocket.dart';
-import 'package:mobile_app_standard/locator.dart';
+import 'package:ncd_screening_mobile/domain/http_client/websocket.dart';
+import 'package:ncd_screening_mobile/locator.dart';
 
 part 'websocket_event.dart';
 part 'websocket_state.dart';

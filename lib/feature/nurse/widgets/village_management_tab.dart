@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/pages/nurse_patient_list_page.dart';
-import 'package:mobile_app_standard/feature/nurse/pages/nurse_vhv_list_page.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_patient_list_page.dart';
+import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_vhv_list_page.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class VillageManagementTab extends StatelessWidget {
   final Nurse nurse;

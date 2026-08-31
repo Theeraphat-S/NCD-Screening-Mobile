@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/services/ncd_risk_calculator.dart';
-import 'package:mobile_app_standard/domain/services/pdf_report_service.dart';
-import 'package:mobile_app_standard/locator.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
+import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
+import 'package:ncd_screening_mobile/locator.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 void main() {

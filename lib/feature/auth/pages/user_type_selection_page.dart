@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/feature/auth/bloc/auth_bloc.dart';
-import 'package:mobile_app_standard/feature/auth/pages/login_page.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
+import 'package:ncd_screening_mobile/feature/auth/pages/login_page.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class UserTypeSelectionPage extends StatelessWidget {
   const UserTypeSelectionPage({super.key});

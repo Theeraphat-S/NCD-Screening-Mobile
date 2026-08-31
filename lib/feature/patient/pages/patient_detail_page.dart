@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
-import 'package:mobile_app_standard/feature/patient/pages/add_edit_patient_page.dart';
-import 'package:mobile_app_standard/feature/patient/pages/patient_history_list_page.dart';
-import 'package:mobile_app_standard/feature/screening/pages/screening_form_page.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
-import 'package:mobile_app_standard/shared/widgets/patient_accessibility_floating_bubble.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
+import 'package:ncd_screening_mobile/feature/patient/pages/add_edit_patient_page.dart';
+import 'package:ncd_screening_mobile/feature/patient/pages/patient_history_list_page.dart';
+import 'package:ncd_screening_mobile/feature/screening/pages/screening_form_page.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/patient_accessibility_floating_bubble.dart';
 
 class PatientDetailPage extends StatelessWidget {
   final Patient patient;

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/domain/models/sync_queue_item.dart';
-import 'package:mobile_app_standard/domain/services/sync_queue_service.dart';
+import 'package:ncd_screening_mobile/domain/models/sync_queue_item.dart';
+import 'package:ncd_screening_mobile/domain/services/sync_queue_service.dart';
 
 // --- Events ---
 abstract class SyncBadgeEvent extends Equatable {

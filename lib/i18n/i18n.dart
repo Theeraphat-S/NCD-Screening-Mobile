@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mobile_app_standard/i18n/locals/appbar/appbar_localizations.dart';
-import 'package:mobile_app_standard/i18n/locals/general/general_localizations.dart';
-import 'package:mobile_app_standard/i18n/locals/home_page/home_page_localizations.dart';
-import 'package:mobile_app_standard/i18n/locals/todo_page/todo_page_localizations.dart';
+import 'package:ncd_screening_mobile/i18n/locals/appbar/appbar_localizations.dart';
+import 'package:ncd_screening_mobile/i18n/locals/general/general_localizations.dart';
+import 'package:ncd_screening_mobile/i18n/locals/home_page/home_page_localizations.dart';
+import 'package:ncd_screening_mobile/i18n/locals/todo_page/todo_page_localizations.dart';
 
 class I18n {
   static final all = [const Locale('en'), const Locale('th')];

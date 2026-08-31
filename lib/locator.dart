@@ -1,21 +1,21 @@
 import 'package:get_it/get_it.dart';
-import 'package:mobile_app_standard/data/datasources/drift/app_database.dart';
-import 'package:mobile_app_standard/data/repositories/drift_ncd_repository.dart';
-import 'package:mobile_app_standard/domain/http_client/ip.dart';
-import 'package:mobile_app_standard/domain/http_client/websocket.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
-import 'package:mobile_app_standard/domain/services/pdf_report_service.dart';
-import 'package:mobile_app_standard/domain/services/sync_queue_service.dart';
-import 'package:mobile_app_standard/feature/auth/bloc/auth_bloc.dart';
-import 'package:mobile_app_standard/feature/home/bloc/websocket/websocket_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_analytics_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
-import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
-import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
-import 'package:mobile_app_standard/feature/vhv/bloc/vhv_bloc.dart';
-import 'package:mobile_app_standard/shared/bloc/accessibility/accessibility_cubit.dart';
-import 'package:mobile_app_standard/shared/bloc/language/language_bloc.dart';
-import 'package:mobile_app_standard/shared/bloc/sync_badge_bloc.dart';
+import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
+import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/http_client/ip.dart';
+import 'package:ncd_screening_mobile/domain/http_client/websocket.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
+import 'package:ncd_screening_mobile/domain/services/sync_queue_service.dart';
+import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
+import 'package:ncd_screening_mobile/feature/home/bloc/websocket/websocket_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
+import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
+import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
+import 'package:ncd_screening_mobile/feature/vhv/bloc/vhv_bloc.dart';
+import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
+import 'package:ncd_screening_mobile/shared/bloc/language/language_bloc.dart';
+import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
 
 final locator = GetIt.instance;
 

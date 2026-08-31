@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_standard/domain/services/clinical_triage_service.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/domain/services/clinical_triage_service.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class EmergencyHospitalCard extends StatelessWidget {
   final ClinicalTriageAssessment triage;

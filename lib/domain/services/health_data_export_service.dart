@@ -1,4 +1,4 @@
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 
 enum ExportPrivacyMode {
   anonymized, // Masked for PDPA and public research

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/feature/auth/pages/user_type_selection_page.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_analytics_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/pages/nurse_add_edit_vhv_page.dart';
-import 'package:mobile_app_standard/feature/nurse/widgets/analytics_charts_section.dart';
-import 'package:mobile_app_standard/feature/nurse/widgets/analytics_filter_bar.dart';
-import 'package:mobile_app_standard/feature/nurse/widgets/analytics_kpi_section.dart';
-import 'package:mobile_app_standard/feature/nurse/widgets/demographics_section.dart';
-import 'package:mobile_app_standard/feature/nurse/widgets/export_health_data_dialog.dart';
-import 'package:mobile_app_standard/feature/nurse/widgets/high_risk_queue_list.dart';
-import 'package:mobile_app_standard/feature/nurse/widgets/village_comparison_table.dart';
-import 'package:mobile_app_standard/feature/nurse/widgets/village_management_tab.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
-import 'package:mobile_app_standard/shared/widgets/sync_badge_widget.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/feature/auth/pages/user_type_selection_page.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_add_edit_vhv_page.dart';
+import 'package:ncd_screening_mobile/feature/nurse/widgets/analytics_charts_section.dart';
+import 'package:ncd_screening_mobile/feature/nurse/widgets/analytics_filter_bar.dart';
+import 'package:ncd_screening_mobile/feature/nurse/widgets/analytics_kpi_section.dart';
+import 'package:ncd_screening_mobile/feature/nurse/widgets/demographics_section.dart';
+import 'package:ncd_screening_mobile/feature/nurse/widgets/export_health_data_dialog.dart';
+import 'package:ncd_screening_mobile/feature/nurse/widgets/high_risk_queue_list.dart';
+import 'package:ncd_screening_mobile/feature/nurse/widgets/village_comparison_table.dart';
+import 'package:ncd_screening_mobile/feature/nurse/widgets/village_management_tab.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/sync_badge_widget.dart';
 
 class NurseVillageListPage extends StatefulWidget {
   final Nurse nurse;

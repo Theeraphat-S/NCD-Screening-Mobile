@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/services/ncd_risk_calculator.dart';
-import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
-import 'package:mobile_app_standard/feature/screening/pages/risk_assessment_result_page.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
+import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
+import 'package:ncd_screening_mobile/feature/screening/pages/risk_assessment_result_page.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class ScreeningFormPage extends StatefulWidget {
   final Patient patient;

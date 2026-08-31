@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/models/village_analytics.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_analytics_bloc.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
 
 class FailingMockNcdRepository extends MockNcdRepository {
   @override

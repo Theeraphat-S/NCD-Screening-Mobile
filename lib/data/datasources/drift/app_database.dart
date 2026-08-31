@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:mobile_app_standard/data/datasources/drift/ncd_tables.dart';
-import 'package:mobile_app_standard/domain/services/ncd_risk_calculator.dart';
+import 'package:ncd_screening_mobile/data/datasources/drift/ncd_tables.dart';
+import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 
 part 'app_database.g.dart';
 

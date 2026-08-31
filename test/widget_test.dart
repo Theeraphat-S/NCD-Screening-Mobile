@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
-import 'package:mobile_app_standard/feature/auth/bloc/auth_bloc.dart';
-import 'package:mobile_app_standard/feature/auth/pages/login_page.dart';
-import 'package:mobile_app_standard/feature/auth/pages/user_type_selection_page.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
+import 'package:ncd_screening_mobile/feature/auth/pages/login_page.dart';
+import 'package:ncd_screening_mobile/feature/auth/pages/user_type_selection_page.dart';
 
 void main() {
   late MockNcdRepository mockRepository;

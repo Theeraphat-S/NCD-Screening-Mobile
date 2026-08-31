@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app_standard/shared/components/appbar/language_dropdown.dart';
+import 'package:ncd_screening_mobile/shared/components/appbar/language_dropdown.dart';
 
 class AppBarCustom extends StatelessWidget
     implements ObstructingPreferredSizeWidget {

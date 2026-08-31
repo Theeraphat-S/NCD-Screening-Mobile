@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
-import 'package:mobile_app_standard/feature/auth/bloc/auth_bloc.dart';
-import 'package:mobile_app_standard/feature/nurse/bloc/village_bloc.dart';
-import 'package:mobile_app_standard/feature/patient/bloc/patient_bloc.dart';
-import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
-import 'package:mobile_app_standard/feature/vhv/bloc/vhv_bloc.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
+import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
+import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
+import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
+import 'package:ncd_screening_mobile/feature/vhv/bloc/vhv_bloc.dart';
 
 void main() {
   late MockNcdRepository repository;

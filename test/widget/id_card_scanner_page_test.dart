@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
-import 'package:mobile_app_standard/feature/patient/pages/add_edit_patient_page.dart';
-import 'package:mobile_app_standard/feature/patient/pages/id_card_scanner_page.dart';
-import 'package:mobile_app_standard/feature/screening/pages/screening_form_page.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/feature/patient/pages/add_edit_patient_page.dart';
+import 'package:ncd_screening_mobile/feature/patient/pages/id_card_scanner_page.dart';
+import 'package:ncd_screening_mobile/feature/screening/pages/screening_form_page.dart';
 
 class MockNcdRepository implements NcdRepositoryInterface {
   final Map<String, Patient> patientsByCitizenId = {};

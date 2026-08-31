@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/feature/auth/pages/user_type_selection_page.dart';
-import 'package:mobile_app_standard/feature/patient/pages/patient_screening_detail_page.dart';
-import 'package:mobile_app_standard/feature/screening/bloc/screening_bloc.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/feature/auth/pages/user_type_selection_page.dart';
+import 'package:ncd_screening_mobile/feature/patient/pages/patient_screening_detail_page.dart';
+import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
-import 'package:mobile_app_standard/shared/widgets/patient_accessibility_floating_bubble.dart';
+import 'package:ncd_screening_mobile/shared/widgets/patient_accessibility_floating_bubble.dart';
 
 class PatientHistoryListPage extends StatefulWidget {
   final Patient patient;

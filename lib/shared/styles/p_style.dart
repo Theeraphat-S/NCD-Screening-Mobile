@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
-import 'package:mobile_app_standard/shared/tokens/p_elevation.dart';
-import 'package:mobile_app_standard/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_elevation.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 class PStyle {
   static ButtonStyle get btnPrimary {

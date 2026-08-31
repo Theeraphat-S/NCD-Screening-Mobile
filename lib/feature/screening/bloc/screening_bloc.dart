@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/domain/models/ncd_models.dart';
-import 'package:mobile_app_standard/domain/models/sync_queue_item.dart';
-import 'package:mobile_app_standard/domain/repositories/ncd_repository.dart';
-import 'package:mobile_app_standard/domain/services/ncd_risk_calculator.dart';
-import 'package:mobile_app_standard/domain/services/sync_queue_service.dart';
-import 'package:mobile_app_standard/locator.dart';
+import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/models/sync_queue_item.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
+import 'package:ncd_screening_mobile/domain/services/sync_queue_service.dart';
+import 'package:ncd_screening_mobile/locator.dart';
 
 // EVENTS
 abstract class ScreeningEvent extends Equatable {

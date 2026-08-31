@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:mobile_app_standard/i18n/i18n.dart';
-import 'package:mobile_app_standard/router/router.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/i18n/i18n.dart';
+import 'package:ncd_screening_mobile/router/router.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class BottomBarCustom extends HookWidget {
   final String currentRouteName;

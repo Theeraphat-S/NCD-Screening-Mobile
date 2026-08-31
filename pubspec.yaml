@@ -1,5 +1,5 @@
-name: mobile_app_standard
-description: "A new Flutter project."
+name: ncd_screening_mobile
+description: "Offline-first Flutter mobile application for 4 Non-Communicable Diseases (NCDs) risk screening, triage, village health analytics, and clinical PDF reporting for Mae Ai Sub-district Health Promotion Hospital."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 flavors:

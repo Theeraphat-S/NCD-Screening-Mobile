@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/shared/bloc/accessibility/accessibility_cubit.dart';
-import 'package:mobile_app_standard/shared/theme/app_theme.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
-import 'package:mobile_app_standard/shared/widgets/patient_accessibility_floating_bubble.dart';
+import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
+import 'package:ncd_screening_mobile/shared/theme/app_theme.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/patient_accessibility_floating_bubble.dart';
 
 void main() {
   group('PatientAccessibilityFloatingBubble Widget Tests', () {

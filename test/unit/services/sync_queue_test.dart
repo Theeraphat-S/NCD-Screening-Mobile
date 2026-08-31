@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app_standard/domain/models/sync_queue_item.dart';
-import 'package:mobile_app_standard/domain/services/sync_queue_service.dart';
-import 'package:mobile_app_standard/shared/bloc/sync_badge_bloc.dart';
+import 'package:ncd_screening_mobile/domain/models/sync_queue_item.dart';
+import 'package:ncd_screening_mobile/domain/services/sync_queue_service.dart';
+import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
 
 void main() {
   group('SyncQueueService', () {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app_standard/shared/bloc/sync_badge_bloc.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class SyncBadgeWidget extends StatelessWidget {
   const SyncBadgeWidget({super.key});

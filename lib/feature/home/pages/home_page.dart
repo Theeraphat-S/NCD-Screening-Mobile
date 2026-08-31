@@ -3,15 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:mobile_app_standard/domain/http_client/ip.dart';
-import 'package:mobile_app_standard/i18n/i18n.dart';
-import 'package:mobile_app_standard/locator.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
-import 'package:mobile_app_standard/shared/tokens/p_size.dart';
-import 'package:mobile_app_standard/shared/tokens/p_spacing.dart';
-import 'package:mobile_app_standard/shared/styles/p_style.dart';
-import 'package:mobile_app_standard/shared/components/appbar/appbar_custom.dart';
-import 'package:mobile_app_standard/shared/components/appbar/bottombar_custom.dart';
+import 'package:ncd_screening_mobile/domain/http_client/ip.dart';
+import 'package:ncd_screening_mobile/i18n/i18n.dart';
+import 'package:ncd_screening_mobile/locator.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_size.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
+import 'package:ncd_screening_mobile/shared/styles/p_style.dart';
+import 'package:ncd_screening_mobile/shared/components/appbar/appbar_custom.dart';
+import 'package:ncd_screening_mobile/shared/components/appbar/bottombar_custom.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 @RoutePage()

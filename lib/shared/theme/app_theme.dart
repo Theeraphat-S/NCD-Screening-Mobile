@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_standard/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class AppTheme {
   static ThemeData get standardTheme => ThemeData(
