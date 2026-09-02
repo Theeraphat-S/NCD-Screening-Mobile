@@ -7,12 +7,12 @@ class PColor {
   static const Color primaryDark = Color(0xFF115E59); // Teal 800
   static const Color primaryLight = Color(0xFFCCFBF1); // Teal 100
   static const Color secondaryColor = Color(0xFF0284C7); // Sky 600
-  
+
   // Surfaces & Backgrounds
   static const Color backgroundColor = Color(0xFFF8FAFC); // Slate 50
   static const Color neutralColor = Color(0xFFFFFFFF); // Pure White
   static const Color surfaceSubtle = Color(0xFFF1F5F9); // Slate 100
-  
+
   // Typography & Borders
   static const Color textNeutralColor = Color(0xFF64748B); // Slate 500
   static const Color textSecondary = Color(0xFF475569); // Slate 600
@@ -24,11 +24,15 @@ class PColor {
   // High Contrast (WCAG AAA) Accessibility Tokens
   static const Color hcBackground = Color(0xFF121212); // Dark Charcoal
   static const Color hcSurface = Color(0xFF1E1E1E); // Elevated Dark Card
-  static const Color hcSurfaceElevated = Color(0xFF2C2C2C); // Active/Hover Surface
+  static const Color hcSurfaceElevated = Color(
+    0xFF2C2C2C,
+  ); // Active/Hover Surface
   static const Color hcAccent = Color(0xFFFFD600); // Vivid Yellow Accent
   static const Color hcCyan = Color(0xFF00E5FF); // Vivid Cyan Accent
   static const Color hcText = Color(0xFFFFFFFF); // Pure White Text
-  static const Color hcTextMuted = Color(0xFFB0B0B0); // High Contrast Muted Text
+  static const Color hcTextMuted = Color(
+    0xFFB0B0B0,
+  ); // High Contrast Muted Text
 
   // Calibrated Clinical Risk Tokens (WCAG AA Compliant)
   static const Color riskLow = Color(0xFF059669); // Emerald 600
@@ -45,19 +49,30 @@ class PColor {
   static const Color statusApprovedBg = Color(0xFFECFDF5); // Emerald 50
 
   static Color getRiskColor(String? risk) {
-    if (risk == null) return riskLow;
+    if (risk == null) {
+      return riskLow;
+    }
     final lower = risk.toLowerCase();
-    if (lower.contains('สูง') || lower.contains('high')) return riskHigh;
-    if (lower.contains('ปานกลาง') || lower.contains('moderate')) return riskModerate;
+    if (lower.contains('สูง') || lower.contains('high')) {
+      return riskHigh;
+    }
+    if (lower.contains('ปานกลาง') || lower.contains('moderate')) {
+      return riskModerate;
+    }
     return riskLow;
   }
 
   static Color getRiskBgColor(String? risk) {
-    if (risk == null) return riskLowBg;
+    if (risk == null) {
+      return riskLowBg;
+    }
     final lower = risk.toLowerCase();
-    if (lower.contains('สูง') || lower.contains('high')) return riskHighBg;
-    if (lower.contains('ปานกลาง') || lower.contains('moderate')) return riskModerateBg;
+    if (lower.contains('สูง') || lower.contains('high')) {
+      return riskHighBg;
+    }
+    if (lower.contains('ปานกลาง') || lower.contains('moderate')) {
+      return riskModerateBg;
+    }
     return riskLowBg;
   }
 }
-

@@ -23,9 +23,32 @@ class PdfPreviewPage extends StatelessWidget {
     this.pdfReportService,
   });
 
+  static Future<void> open(
+    BuildContext context, {
+    required Patient patient,
+    required Screening screening,
+    VHV? vhv,
+    Nurse? nurse,
+    Village? village,
+  }) {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PdfPreviewPage(
+          patient: patient,
+          screening: screening,
+          vhv: vhv,
+          nurse: nurse,
+          village: village,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final reportService = pdfReportService ??
+    final reportService =
+        pdfReportService ??
         (locator.isRegistered<PdfReportServiceInterface>()
             ? locator<PdfReportServiceInterface>()
             : PdfReportService());
@@ -39,13 +62,16 @@ class PdfPreviewPage extends StatelessWidget {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Column(
           children: [
             const Text(
-              '?????????????? PDF',
+              'ตัวอย่างรายงาน PDF',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
@@ -53,11 +79,8 @@ class PdfPreviewPage extends StatelessWidget {
               ),
             ),
             Text(
-              '${patient.fullName} � ${screening.screenId}',
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.white70,
-              ),
+              '${patient.fullName} • ${screening.screenId}',
+              style: const TextStyle(fontSize: 12, color: Colors.white70),
             ),
           ],
         ),
@@ -84,7 +107,7 @@ class PdfPreviewPage extends StatelessWidget {
               CircularProgressIndicator(color: PColor.primaryColor),
               SizedBox(height: 12),
               Text(
-                '?????????????????????? PDF...',
+                'กำลังสร้างเอกสารรายงาน PDF...',
                 style: TextStyle(color: PColor.textNeutralColor, fontSize: 13),
               ),
             ],
@@ -96,10 +119,14 @@ class PdfPreviewPage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline_rounded, color: Colors.red, size: 48),
+                const Icon(
+                  Icons.error_outline_rounded,
+                  color: Colors.red,
+                  size: 48,
+                ),
                 const SizedBox(height: 12),
                 const Text(
-                  '?????????????????????????????? PDF',
+                  'เกิดข้อผิดพลาดในการสร้างเอกสาร PDF',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -110,7 +137,10 @@ class PdfPreviewPage extends StatelessWidget {
                 Text(
                   error.toString(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12, color: PColor.textNeutralColor),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: PColor.textNeutralColor,
+                  ),
                 ),
               ],
             ),

@@ -34,7 +34,7 @@ class PdfReportService implements PdfReportServiceInterface {
   }) async {
     final pdf = pw.Document(
       title: 'NCD Screening Report - ${patient.fullName}',
-      author: '??.??.??????',
+      author: 'รพ.สต.แม่อาย',
       creator: 'NCD Screening Mobile App',
     );
 
@@ -122,7 +122,7 @@ class PdfReportService implements PdfReportServiceInterface {
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Text(
-                  '????????????????????????????????? (??.??.??????)',
+                  'โรงพยาบาลส่งเสริมสุขภาพตำบลแม่อาย (รพ.สต.แม่อาย)',
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
@@ -131,7 +131,7 @@ class PdfReportService implements PdfReportServiceInterface {
                 ),
                 pw.SizedBox(height: 2),
                 pw.Text(
-                  '???????????????????????????????????????????????????????????????????????? (NCDs)',
+                  'รายงานสรุปผลการตรวจคัดกรองสุขภาพและประเมินความเสี่ยงโรคไม่ติดต่อเรื้อรัง (NCDs)',
                   style: pw.TextStyle(
                     fontSize: 11,
                     fontWeight: pw.FontWeight.bold,
@@ -159,7 +159,7 @@ class PdfReportService implements PdfReportServiceInterface {
               crossAxisAlignment: pw.CrossAxisAlignment.end,
               children: [
                 pw.Text(
-                  '??????????: $dateFormatted',
+                  'วันที่ตรวจ: $dateFormatted',
                   style: pw.TextStyle(
                     fontSize: 9.5,
                     fontWeight: pw.FontWeight.bold,
@@ -167,7 +167,7 @@ class PdfReportService implements PdfReportServiceInterface {
                   ),
                 ),
                 pw.Text(
-                  '???????????: ${screening.screenId}',
+                  'รหัสคัดกรอง: ${screening.screenId}',
                   style: const pw.TextStyle(
                     fontSize: 8.5,
                     color: PdfColor.fromInt(0xFF4A5568),
@@ -193,11 +193,11 @@ class PdfReportService implements PdfReportServiceInterface {
 
     final villageAddress = village != null
         ? village.fullAddress
-        : (patient.villageId.isNotEmpty ? '????????????: ${patient.villageId}' : '-');
+        : (patient.villageId.isNotEmpty ? 'รหัสหมู่บ้าน: ${patient.villageId}' : '-');
 
     final screenerName = vhv != null
-        ? '${vhv.fullName} (???.)'
-        : (screening.vhvId.isNotEmpty ? '${screening.vhvId} (???.)' : '???. ????????????');
+        ? '${vhv.fullName} (อสม.)'
+        : (screening.vhvId.isNotEmpty ? '${screening.vhvId} (อสม.)' : 'อสม. ประจำพื้นที่');
 
     return pw.Container(
       padding: const pw.EdgeInsets.all(10),
@@ -210,7 +210,7 @@ class PdfReportService implements PdfReportServiceInterface {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(
-            '1. ??????????????????????????????????? (Patient Demographics)',
+            '1. ข้อมูลทั่วไปของผู้รับการตรวจคัดกรอง (Patient Demographics)',
             style: pw.TextStyle(
               fontSize: 11,
               fontWeight: pw.FontWeight.bold,
@@ -222,15 +222,15 @@ class PdfReportService implements PdfReportServiceInterface {
             children: [
               pw.Expanded(
                 flex: 3,
-                child: _buildInfoItem('????-???????:', patient.fullName),
+                child: _buildInfoItem('ชื่อ-นามสกุล:', patient.fullName),
               ),
               pw.Expanded(
                 flex: 3,
-                child: _buildInfoItem('??????????????:', patient.patientCitizenId),
+                child: _buildInfoItem('เลขบัตรประชาชน:', patient.patientCitizenId),
               ),
               pw.Expanded(
                 flex: 2,
-                child: _buildInfoItem('??? / ????:', '${patient.patientGender} / ${screening.ageAtScreening} ??'),
+                child: _buildInfoItem('เพศ / อายุ:', '${patient.patientGender} / ${screening.ageAtScreening} ปี'),
               ),
             ],
           ),
@@ -239,15 +239,15 @@ class PdfReportService implements PdfReportServiceInterface {
             children: [
               pw.Expanded(
                 flex: 3,
-                child: _buildInfoItem('???/?????/??????:', '$birthDateStr (???? ${patient.age} ??)'),
+                child: _buildInfoItem('วัน/เดือน/ปีเกิด:', '$birthDateStr (อายุ ${patient.age} ปี)'),
               ),
               pw.Expanded(
                 flex: 3,
-                child: _buildInfoItem('?????????????:', patient.patientMobile.isNotEmpty ? patient.patientMobile : '-'),
+                child: _buildInfoItem('เบอร์โทรศัพท์:', patient.patientMobile.isNotEmpty ? patient.patientMobile : '-'),
               ),
               pw.Expanded(
                 flex: 2,
-                child: _buildInfoItem('??????????????:', screenerName),
+                child: _buildInfoItem('ผู้ตรวจคัดกรอง:', screenerName),
               ),
             ],
           ),
@@ -255,7 +255,7 @@ class PdfReportService implements PdfReportServiceInterface {
           pw.Row(
             children: [
               pw.Expanded(
-                child: _buildInfoItem('??????? / ????????:', '${patient.patientAddress} $villageAddress'),
+                child: _buildInfoItem('ที่อยู่ / หมู่บ้าน:', '${patient.patientAddress} $villageAddress'),
               ),
             ],
           ),
@@ -300,7 +300,7 @@ class PdfReportService implements PdfReportServiceInterface {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(
-            '2. ???????????????????????????? (Vital Signs & Physical Measurements)',
+            '2. ผลการตรวจสัญญาณชีพและร่างกาย (Vital Signs & Physical Measurements)',
             style: pw.TextStyle(
               fontSize: 11,
               fontWeight: pw.FontWeight.bold,
@@ -317,20 +317,20 @@ class PdfReportService implements PdfReportServiceInterface {
               pw.TableRow(
                 decoration: const pw.BoxDecoration(color: PdfColor.fromInt(0xFFE6F4F1)),
                 children: [
-                  _buildTableCell('???????????? (BP)', isHeader: true),
-                  _buildTableCell('??????????????????', isHeader: true),
-                  _buildTableCell('??????????? (BMI)', isHeader: true),
-                  _buildTableCell('?????? (Waist)', isHeader: true),
-                  _buildTableCell('????? (Pulse)', isHeader: true),
-                  _buildTableCell('??????? / ???????', isHeader: true),
+                  _buildTableCell('ความดันโลหิต (BP)', isHeader: true),
+                  _buildTableCell('ระดับน้ำตาลในเลือด', isHeader: true),
+                  _buildTableCell('ดัชนีมวลกาย (BMI)', isHeader: true),
+                  _buildTableCell('รอบเอว (Waist)', isHeader: true),
+                  _buildTableCell('ชีพจร (Pulse)', isHeader: true),
+                  _buildTableCell('น้ำหนัก / ส่วนสูง', isHeader: true),
                 ],
               ),
               pw.TableRow(
                 children: [
                   _buildTableCell('${screening.sbp.toInt()} / ${screening.dbp.toInt()} mmHg'),
                   _buildTableCell('${screening.bloodSugar.toStringAsFixed(0)} mg/dL'),
-                  _buildTableCell('${screening.bmi.toStringAsFixed(1)} kg/m�'),
-                  _buildTableCell('${screening.waistCm.toStringAsFixed(1)} ??.'),
+                  _buildTableCell('${screening.bmi.toStringAsFixed(1)} kg/m²'),
+                  _buildTableCell('${screening.waistCm.toStringAsFixed(1)} ซม.'),
                   _buildTableCell('${screening.pulse.toInt()} bpm'),
                   _buildTableCell('${screening.weight.toStringAsFixed(1)} kg / ${screening.height.toStringAsFixed(1)} cm'),
                 ],
@@ -373,7 +373,7 @@ class PdfReportService implements PdfReportServiceInterface {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(
-            '3. ???????????????????? 4 ????????????????????????? (4 NCDs Risk Assessment)',
+            '3. การประเมินความเสี่ยง 4 กลุ่มโรคไม่ติดต่อเรื้อรัง (4 NCDs Risk Assessment)',
             style: pw.TextStyle(
               fontSize: 11,
               fontWeight: pw.FontWeight.bold,
@@ -396,10 +396,10 @@ class PdfReportService implements PdfReportServiceInterface {
               pw.TableRow(
                 decoration: const pw.BoxDecoration(color: PdfColor.fromInt(0xFFE6F4F1)),
                 children: [
-                  _buildTableHeaderCell('??? / ??????????'),
-                  _buildTableHeaderCell('???????????????'),
-                  _buildTableHeaderCell('????????????????????????'),
-                  _buildTableHeaderCell('??????????????????????'),
+                  _buildTableHeaderCell('โรค / ภาวะสุขภาพ'),
+                  _buildTableHeaderCell('ระดับความเสี่ยง'),
+                  _buildTableHeaderCell('เกณฑ์การประเมินที่ตรวจพบ'),
+                  _buildTableHeaderCell('คำแนะนำในการดูแลสุขภาพ'),
                 ],
               ),
               ...results.map(_buildRiskTableRow),
@@ -433,17 +433,17 @@ class PdfReportService implements PdfReportServiceInterface {
       case RiskLevel.high:
         badgeBg = const PdfColor.fromInt(0xFFFEE2E2);
         badgeText = const PdfColor.fromInt(0xFFB91C1C);
-        badgeLabel = '????????????? (High)';
+        badgeLabel = 'ความเสี่ยงสูง (High)';
         break;
       case RiskLevel.moderate:
         badgeBg = const PdfColor.fromInt(0xFFFEF3C7);
         badgeText = const PdfColor.fromInt(0xFFB45309);
-        badgeLabel = '????????????????? (Moderate)';
+        badgeLabel = 'ความเสี่ยงปานกลาง (Moderate)';
         break;
       case RiskLevel.low:
         badgeBg = const PdfColor.fromInt(0xFFDCFCE7);
         badgeText = const PdfColor.fromInt(0xFF15803D);
-        badgeLabel = '????????????? (Low)';
+        badgeLabel = 'ความเสี่ยงต่ำ (Low)';
         break;
     }
 
@@ -513,8 +513,8 @@ class PdfReportService implements PdfReportServiceInterface {
     final isApproved = screening.reviewStatus == ReviewStatus.approved;
     final nurseName = nurse?.fullName ??
         (screening.reviewedByNurseId != null && screening.reviewedByNurseId!.isNotEmpty
-            ? '????????????? (${screening.reviewedByNurseId})'
-            : '?????????????');
+            ? 'พยาบาลวิชาชีพ (${screening.reviewedByNurseId})'
+            : 'พยาบาลวิชาชีพ');
 
     String reviewDateFormatted = '-';
     if (screening.reviewedAt != null) {
@@ -537,7 +537,7 @@ class PdfReportService implements PdfReportServiceInterface {
             mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: [
               pw.Text(
-                '4. ????????????????????????????????????? (Nurse Review & Verification)',
+                '4. การตรวจสอบและรับรองผลโดยพยาบาลวิชาชีพ (Nurse Review & Verification)',
                 style: pw.TextStyle(
                   fontSize: 11,
                   fontWeight: pw.FontWeight.bold,
@@ -559,7 +559,7 @@ class PdfReportService implements PdfReportServiceInterface {
                   ),
                 ),
                 child: pw.Text(
-                  isApproved ? '? ??????????? (APPROVED)' : '? ???????????? (PENDING)',
+                  isApproved ? '✓ อนุมัติแล้ว (APPROVED)' : '⏳ รอการตรวจสอบ (PENDING)',
                   style: pw.TextStyle(
                     fontSize: 8.5,
                     fontWeight: pw.FontWeight.bold,
@@ -574,7 +574,7 @@ class PdfReportService implements PdfReportServiceInterface {
           pw.SizedBox(height: 6),
           if (isApproved)
             pw.Text(
-              '??????????????????????????????: $nurseName  |  ????????????: $reviewDateFormatted',
+              'ได้รับการตรวจสอบและรับรองผลโดย: $nurseName  |  วันที่รับรอง: $reviewDateFormatted',
               style: const pw.TextStyle(
                 fontSize: 8.5,
                 color: PdfColor.fromInt(0xFF1E293B),
@@ -582,7 +582,7 @@ class PdfReportService implements PdfReportServiceInterface {
             )
           else
             pw.Text(
-              '?????: ????????????????????????? ???. ????????????????????????????????????????????',
+              'สถานะ: ข้อมูลคัดกรองเบื้องต้นโดย อสม. อยู่ระหว่างรอพยาบาลวิชาชีพตรวจสอบและยืนยันผล',
               style: const pw.TextStyle(
                 fontSize: 8.5,
                 color: PdfColor.fromInt(0xFF64748B),
@@ -595,7 +595,7 @@ class PdfReportService implements PdfReportServiceInterface {
               pw.Column(
                 children: [
                   pw.Text(
-                    '?????? ................................................................',
+                    'ลงชื่อ ................................................................',
                     style: const pw.TextStyle(fontSize: 8.5, color: PdfColor.fromInt(0xFF475569)),
                   ),
                   pw.SizedBox(height: 2),
@@ -604,7 +604,7 @@ class PdfReportService implements PdfReportServiceInterface {
                     style: pw.TextStyle(fontSize: 8.5, fontWeight: pw.FontWeight.bold, color: const PdfColor.fromInt(0xFF1E293B)),
                   ),
                   pw.Text(
-                    '?????????????? (???.)',
+                    'ผู้ตรวจคัดกรอง (อสม.)',
                     style: const pw.TextStyle(fontSize: 8, color: PdfColor.fromInt(0xFF64748B)),
                   ),
                 ],
@@ -612,7 +612,7 @@ class PdfReportService implements PdfReportServiceInterface {
               pw.Column(
                 children: [
                   pw.Text(
-                    '?????? ................................................................',
+                    'ลงชื่อ ................................................................',
                     style: const pw.TextStyle(fontSize: 8.5, color: PdfColor.fromInt(0xFF475569)),
                   ),
                   pw.SizedBox(height: 2),
@@ -621,7 +621,7 @@ class PdfReportService implements PdfReportServiceInterface {
                     style: pw.TextStyle(fontSize: 8.5, fontWeight: pw.FontWeight.bold, color: const PdfColor.fromInt(0xFF1E293B)),
                   ),
                   pw.Text(
-                    '??????????????????????????',
+                    'พยาบาลวิชาชีพผู้ตรวจรับรอง',
                     style: const pw.TextStyle(fontSize: 8, color: PdfColor.fromInt(0xFF64748B)),
                   ),
                 ],
@@ -645,7 +645,7 @@ class PdfReportService implements PdfReportServiceInterface {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(
-            '???????? / ??????????????????: ',
+            'หมายเหตุ / คำเตือนทางการแพทย์: ',
             style: pw.TextStyle(
               fontSize: 7.5,
               fontWeight: pw.FontWeight.bold,
@@ -654,7 +654,7 @@ class PdfReportService implements PdfReportServiceInterface {
           ),
           pw.Expanded(
             child: pw.Text(
-              '??????????????????????????????????????????????????????? ???????????????????????????????????????????? ??????????????????????????? ?????????????????? ?????????????????????? ??.??.?????? ???????????????????????????????????????????????????????',
+              'รายงานนี้เป็นการประเมินความเสี่ยงสุขภาพเบื้องต้นในชุมชน มิใช่ผลการตรวจวินิจฉัยโรคขั้นสุดท้ายโดยแพทย์ หากผลการประเมินมีความเสี่ยง หรือมีอาการผิดปกติ กรุณานำเอกสารนี้ติดต่อ รพ.สต.แม่อาย หรือโรงพยาบาลใกล้บ้านเพื่อรับการตรวจประเมินอย่างละเอียด',
               style: const pw.TextStyle(
                 fontSize: 7.5,
                 color: PdfColor.fromInt(0xFF78350F),
@@ -679,14 +679,14 @@ class PdfReportService implements PdfReportServiceInterface {
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
           pw.Text(
-            '????????????????????????????????? ?.?????? ?.?????? ?.????????? | ???????? 053-459-000',
+            'โรงพยาบาลส่งเสริมสุขภาพตำบลแม่อาย ต.ท่าตอน อ.แม่อาย จ.เชียงใหม่ | โทรศัพท์ 053-459-000',
             style: const pw.TextStyle(
               fontSize: 7.5,
               color: PdfColor.fromInt(0xFF94A3B8),
             ),
           ),
           pw.Text(
-            '???? ${context.pageNumber} / ${context.pagesCount}',
+            'หน้า ${context.pageNumber} / ${context.pagesCount}',
             style: const pw.TextStyle(
               fontSize: 7.5,
               color: PdfColor.fromInt(0xFF94A3B8),
